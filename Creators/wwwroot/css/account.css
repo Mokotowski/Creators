@@ -1,0 +1,204 @@
+﻿/* Wyśrodkowanie kontenera */
+#register {
+    width: 1000px;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 0 auto; /* Wyśrodkowanie kontenera */
+}
+
+/* Sekcja normalregister */
+#normalregister {
+    background-color: #f0f8ff;
+    width: 100%;
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 80px; /* Odstępy między elementami */
+}
+
+    #normalregister form {
+        max-width: 400px;
+        margin: auto;
+    }
+
+        #normalregister form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        #normalregister form input[type="email"],
+        #normalregister form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        #normalregister form input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        #normalregister form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+            #normalregister form button:hover {
+                background-color: #0056b3;
+            }
+
+        #normalregister form small {
+            display: block;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            color: red;
+        }
+
+/* Sekcja externalregisters */
+#externalregisters {
+    background-color: #e0f7fa;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #ccc;
+    text-align: center;
+    gap: 80px; /* Odstępy między elementami */
+}
+
+.externalregister {
+    color: white;
+    background-color: forestgreen;
+}
+
+    .externalregister a:hover {
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+
+
+
+
+/* Wyśrodkowanie kontenera */
+#login {
+    width: 1000px;
+    height: auto; /* Dopasowanie wysokości do zawartości */
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 0 auto; /* Wyśrodkowanie kontenera */
+}
+
+/* Sekcja normallogin */
+#normallogin {
+    background-color: #f0f8ff;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px; /* Odstępy między elementami */
+}
+
+    #normallogin form {
+        max-width: 400px;
+        margin: auto;
+    }
+
+        #normallogin form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        #normallogin form input[type="email"],
+        #normallogin form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        #normallogin form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+            #normallogin form button:hover {
+                background-color: #0056b3;
+            }
+
+        #normallogin form small {
+            display: block;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            color: red;
+        }
+
+
+/* Sekcja externallogins */
+#externallogins {
+    background-color: #e0f7fa;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #ccc;
+    gap: 20px; /* Odstępy między elementami */
+}
+
+.externallogin form {
+    margin: 0; /* Usunięcie marginesów wewnętrznych formularzy */
+}
+
+.externallogin button {
+    padding: 10px 20px;
+    background-color: forestgreen;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+    .externallogin button:hover {
+        background-color: darkgreen;
+    }
+
+/* Możesz dostosować inne style według potrzeb */

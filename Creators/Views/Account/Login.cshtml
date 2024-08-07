@@ -1,0 +1,44 @@
+﻿<div id="login">
+    <div id="normallogin">
+        <form id="normalloginform" method="post" asp-action="SimpleLogin" asp-controller="Account" onsubmit="return validateForm()">
+
+            <label for="Nick">Username:</label>
+            <input type="text" name="Nick" required placeholder="Enter Username" />
+            <small id="nickError" style="color: red; display: none;">Please enter a valid username.</small>
+
+            <label for="Password">Password:</label>
+            <input type="password" name="Password" id="Password" required minlength="8" placeholder="Enter Password" />
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div id="externallogins">
+
+        <div class="externallogin">
+            <form id="externalloginform" method="post" asp-action="ExternalLogin" asp-controller="Account">
+                <input type="hidden" name="type" value="Facebook" />
+                <button type="submit">Facebook</button>
+            </form>
+        </div>
+
+        <div class="externallogin">
+            <form id="externalloginform" method="post" asp-action="ExternalLogin" asp-controller="Account">
+                <input type="hidden" name="type" value="Microsoft" />
+                <button type="submit">Microsoft Account</button>
+            </form>
+        </div>
+
+        <div class="externallogin">
+            <form id="externalloginform" method="post" asp-action="ExternalLogin" asp-controller="Account">
+                <input type="hidden" name="type" value="Google" />
+                <button type="submit">Google</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+
