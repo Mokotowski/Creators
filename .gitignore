@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Creators/appsettings.json
+/Creators/Creators.Controllers/AccountController.cs
+/Creators/Creators.Controllers/CreatorController.cs
