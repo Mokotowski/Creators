@@ -4,6 +4,7 @@ using Creators.Creators.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Creators.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240808151420_PagesCalendarDonatesUpdate")]
+    partial class PagesCalendarDonatesUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,7 @@ namespace Creators.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Account_Balance")
-                        .HasColumnType("decimal(10, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Account_Numer")
                         .IsRequired()
@@ -79,7 +82,7 @@ namespace Creators.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Site_Commission")
-                        .HasColumnType("decimal(5, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserModelId")
                         .IsRequired()
@@ -102,14 +105,7 @@ namespace Creators.Migrations
 
                     b.Property<string>("CommentsGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CreatorPageId_Creator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -117,17 +113,13 @@ namespace Creators.Migrations
 
                     b.Property<string>("HeartGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Id_Photos")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorPageId_Creator");
-
-                    b.HasIndex("Id_Photos");
 
                     b.ToTable("CreatorPhoto");
                 });
@@ -141,7 +133,7 @@ namespace Creators.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Count")
-                        .HasColumnType("decimal(8, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CreatorPageId_Creator")
                         .IsRequired()
@@ -230,10 +222,7 @@ namespace Creators.Migrations
 
                     b.Property<string>("CommentsGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("CreatorPhotoId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
@@ -253,10 +242,6 @@ namespace Creators.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentsGroup");
-
-                    b.HasIndex("CreatorPhotoId");
-
                     b.ToTable("PhotoComments");
                 });
 
@@ -268,21 +253,14 @@ namespace Creators.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatorPhotoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("HeartGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Id_User")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorPhotoId");
-
-                    b.HasIndex("HeartGroup");
 
                     b.ToTable("PhotoHearts");
                 });
@@ -517,23 +495,6 @@ namespace Creators.Migrations
                     b.Navigation("UserModel");
                 });
 
-            modelBuilder.Entity("Creators.Creators.Database.CreatorPhoto", b =>
-                {
-                    b.HasOne("Creators.Creators.Database.CreatorPage", "CreatorPage")
-                        .WithMany()
-                        .HasForeignKey("CreatorPageId_Creator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Creators.Creators.Database.CreatorPage", null)
-                        .WithMany("CreatorPhotos")
-                        .HasForeignKey("Id_Photos")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatorPage");
-                });
-
             modelBuilder.Entity("Creators.Creators.Database.Donates", b =>
                 {
                     b.HasOne("Creators.Creators.Database.CreatorPage", "CreatorPage")
@@ -575,42 +536,6 @@ namespace Creators.Migrations
                         .IsRequired();
 
                     b.Navigation("CreatorPage");
-                });
-
-            modelBuilder.Entity("Creators.Creators.Database.PhotoComments", b =>
-                {
-                    b.HasOne("Creators.Creators.Database.CreatorPhoto", null)
-                        .WithMany("PhotoComments")
-                        .HasForeignKey("CommentsGroup")
-                        .HasPrincipalKey("CommentsGroup")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Creators.Creators.Database.CreatorPhoto", "CreatorPhoto")
-                        .WithMany()
-                        .HasForeignKey("CreatorPhotoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatorPhoto");
-                });
-
-            modelBuilder.Entity("Creators.Creators.Database.PhotoHearts", b =>
-                {
-                    b.HasOne("Creators.Creators.Database.CreatorPhoto", "CreatorPhoto")
-                        .WithMany()
-                        .HasForeignKey("CreatorPhotoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Creators.Creators.Database.CreatorPhoto", null)
-                        .WithMany("PhotoHearts")
-                        .HasForeignKey("HeartGroup")
-                        .HasPrincipalKey("HeartGroup")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatorPhoto");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -668,19 +593,10 @@ namespace Creators.Migrations
                 {
                     b.Navigation("CalendarEvents");
 
-                    b.Navigation("CreatorPhotos");
-
                     b.Navigation("Donates");
 
                     b.Navigation("PageData")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Creators.Creators.Database.CreatorPhoto", b =>
-                {
-                    b.Navigation("PhotoComments");
-
-                    b.Navigation("PhotoHearts");
                 });
 
             modelBuilder.Entity("Creators.Creators.Database.UserModel", b =>

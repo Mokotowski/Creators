@@ -1,9 +1,17 @@
 Strony twórców 
 : donate, czat z twórc¹, og³oszenia dla subskrybentów na stronie i na email wiadomoœci, 
+: strona ze zdjêciami mo¿liwoœci wys³ania z opsiem - komentarze lajki
+:powiadomienia na email jeœli w³¹czone o nowych aktywnoœciach, zdjeciach z szablonu z nazw¹ twórcy i linkiem do zobaczenia
+
+
+(Czaty grupowe)
+
+
+
 
 Zak³adanie stron, odpisywanie blokowanie ludzi 
 
-Regulamin
+RegulaminV
 
 kalendarz z evaentami co siê wydarzy  dzieñ godzina
 
