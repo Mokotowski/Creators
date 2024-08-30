@@ -15,8 +15,7 @@ namespace Creators.Creators.Database
 
         public CreatorPage CreatorPage { get; set; }
 
-        public List<PhotoHearts> PhotoHearts { get; set; }
-        public List<PhotoComments> PhotoComments { get; set; }
-
+        public List<PhotoComments> Comments { get; set; }
+        public List<PhotoHearts> Hearts { get; set; }
     }
 }

@@ -9,13 +9,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Creators.Creators.Services
 {
-    public class AccountAuthentication : IRegister, ILogin, ILogout
+    public class AccountAuthenticationServies : IRegister, ILogin, ILogout
     {
         private readonly SignInManager<UserModel> _signInManager;
         private readonly UserManager<UserModel> _userManager;
-        private readonly ILogger<AccountAuthentication> _logger;
+        private readonly ILogger<AccountAuthenticationServies> _logger;
 
-        public AccountAuthentication(UserManager<UserModel> userManager,SignInManager<UserModel> signInManager, ILogger<AccountAuthentication> logger)
+        public AccountAuthenticationServies(UserManager<UserModel> userManager,SignInManager<UserModel> signInManager, ILogger<AccountAuthenticationServies> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;

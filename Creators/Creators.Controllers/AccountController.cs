@@ -1,5 +1,7 @@
-﻿using Creators.Creators.Services;
+﻿using Creators.Creators.Database;
+using Creators.Creators.Services;
 using Creators.Creators.Services.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Drawing.Drawing2D;
@@ -13,14 +15,17 @@ namespace Creators.Controllers
         private readonly ISendEmail _sendEmail;
         private readonly IFunctionsFromEmail _functionsEmail;
         private readonly ILogout _logout;
-
-        public AccountController(IRegister register, ILogin login, ISendEmail sendEmail, IFunctionsFromEmail functionsEmail, ILogout logout)
+        private readonly UserManager<UserModel> _userManager;
+        private readonly SignInManager<UserModel> _signInManager;
+        public AccountController(IRegister register, ILogin login, ISendEmail sendEmail, IFunctionsFromEmail functionsEmail, ILogout logout, UserManager<UserModel> userManager, SignInManager<UserModel> signInManager)
         {
             _register = register;
             _login = login;
             _sendEmail = sendEmail;
             _functionsEmail = functionsEmail;
             _logout = logout;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]

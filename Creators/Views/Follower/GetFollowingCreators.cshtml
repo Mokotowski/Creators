@@ -1,0 +1,28 @@
+﻿@model List<Creators.Creators.Database.Followers>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/following-creators.css" />
+}
+
+<div class="container-following">
+    <h2>Following Creators</h2>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <ul class="following-list">
+            @foreach (var following in Model)
+            {
+                <li class="following-item">
+                    <div class="creator-info">
+                        <span class="creator-name">@following.CreatorName</span>
+                        <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = following.Id_Creator })" class="goto-page">Go to Creator's Page</a>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>You are not following any creators.</p>
+    }
+</div>

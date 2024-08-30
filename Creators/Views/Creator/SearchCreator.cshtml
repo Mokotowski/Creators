@@ -1,0 +1,10 @@
+﻿<div class="form-searchcreator">
+    <form id="creatorSearchForm" method="get" asp-action="SearchCreatorResult" asp-controller="Creator">
+        <div class="form-group">
+            <label for="profileName">Profile Name:</label>
+            <textarea id="profileName" name="ProfileName" rows="4" minlength="4" maxlength="50" required placeholder="Enter the name of the creator to search"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Search creator</button>
+    </form>
+</div>

@@ -1,0 +1,29 @@
+﻿<div class="container-updatepageresult">
+    @if (ViewBag.Result == "Success")
+    {
+        <h1 class="success">Update Successful</h1>
+        <p>Your page has been successfully updated. All changes have been applied correctly.</p>
+        <p>You can view your page at the following link:, <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = ViewBag.Id_Creator })">click here</a>.</p>
+    }
+    else if (ViewBag.Result == "Error")
+    {
+        <h1 class="error">Update Failed</h1>
+        <p>Something went wrong while trying to update your page. Please try again.</p>
+        <p>If the issue persists, you may need to refresh the page or request another update your page.</p>
+    }
+    else if (ViewBag.Result == "Exist")
+    {
+        <h1 class="exist">Page Not Found</h1>
+        <p>It seems that the page you are trying to update does not exist. Please verify the user, email or page details and try again.</p>
+    }
+    else if (ViewBag.Result == "UserError")
+    {
+        <h1 class="user-error">User Mismatch</h1>
+        <p>The user requesting the change does not match the currently logged-in user. Please make sure you are logged in with the correct account and try again.</p>
+    }
+    else
+    {
+        <h1 class="error">Unknown Error</h1>
+        <p>An unexpected error occurred. Please try again later or contact support if the problem continues.</p>
+    }
+</div>

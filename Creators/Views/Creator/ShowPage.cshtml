@@ -1,0 +1,40 @@
+﻿@model Creators.Creators.Models.CreatorPageShow
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/creatorPage.css" />
+}
+
+<div class="container">
+    <div class="profile-header">
+        <img src="@Model.ProfilPicture" alt="@Model.ProfilName" class="profile-picture">
+        <h1 class="profile-name">@Model.ProfilName</h1>
+    </div>
+
+    <div class="creator-info followers">
+        <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = @Model.Id_Creator })" class="goto-page">Check creator fans</a>
+    </div>
+
+    <div class="following">
+        @if (ViewBag.IsFollowing)
+        {
+            <a href="@Url.Action("UnFollow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="goto-page">UnFollow</a>
+        }
+        else
+        {
+            <a href="@Url.Action("Follow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="goto-page">Follow</a>
+
+        }
+    </div>
+    <div class="profile-description">
+        <p>@Model.Description</p>
+    </div>
+    <div class="profile-links">
+        <h2>Find me on:</h2>
+        <ul>
+            @foreach (var link in Model.BioLinks.Split(','))
+            {
+                <li><a href="@link" target="_blank">@link</a></li>
+            }
+        </ul>
+    </div>
+</div>

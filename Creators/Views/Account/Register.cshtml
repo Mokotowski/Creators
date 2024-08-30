@@ -3,7 +3,7 @@
         <form id="normalregisterform" method="post" asp-action="SimpleRegister" asp-controller="Account" onsubmit="return validateForm()">
 
             <label for="Nick">Username:</label>
-            <input type="text" name="Nick" maxlength="20" pattern="[A-Za-z]+" required placeholder="Create Username" />
+            <input type="text" name="Nick" minlength="5" maxlength="20" pattern="[A-Za-z]+" required placeholder="Create Username" />
             <small id="nickError" style="color: red; display: none;">Invalid username.</small>
 
             <label for="FirstName">First Name:</label>

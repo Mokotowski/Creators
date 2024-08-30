@@ -1,0 +1,31 @@
+﻿@model List<Creators.Creators.Models.CreatorsSearch>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/search.css" />
+}
+
+<div class="container-searchresult">
+    <h2>Search Results</h2>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <ul class="creator-list">
+            @foreach (var creator in Model)
+            {
+                <li class="creator-item">
+                    <div class="creator-info">
+                        <img src="@creator.ProfilPicture" alt="Profile Picture" class="profile-icon"
+                             onerror="this.src='/images/default-profile.jpg';" />
+                        <span class="profile-name">@creator.ProfileName</span>
+                    </div>
+                    <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = creator.Id_Creator })" class="goto-page">Go to Page</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No results found.</p>
+        <a href="@Url.Action("SearchCreator", "Creator")">Back to search</a>
+    }
+</div>

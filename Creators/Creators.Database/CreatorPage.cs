@@ -17,10 +17,11 @@ namespace Creators.Creators.Database
 
         public decimal Site_Commission { get; set; }
 
-        public UserModel UserModel { get; set; }
+
+        public UserModel User { get; set; }
         public PageData PageData { get; set; }
         public List<Donates> Donates { get; set; }
         public List<CalendarEvents> CalendarEvents { get; set; }
-        public List<CreatorPhoto> CreatorPhotos { get; set; } 
+        public List<CreatorPhoto> CreatorPhotos { get; set; }
     }
 }

@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Manage Creator Page";
+}
+
+<div class="container-managepage">
+    <h1>Manage Your Creator Page</h1>
+
+    <div class="action-list">
+        <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = ViewBag.Id_Creator })" class="btn btn-primary">
+            View Your Page
+        </a>
+
+        <a href="@Url.Action("UpdatePage", "Creator", new { Id_Creator = ViewBag.Id_Creator })" class="btn btn-warning">
+            Edit Your Page
+        </a>
+
+        <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = ViewBag.Id_Creator })" class="btn btn-info">
+            View Your Followers
+        </a>
+    </div>
+</div>

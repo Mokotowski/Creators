@@ -34,45 +34,30 @@ builder.Services.AddIdentity<UserModel, IdentityRole>(options =>
     // User settings.
     options.User.AllowedUserNameCharacters =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = true;
+    options.User.RequireUniqueEmail = false;
 
 }).AddEntityFrameworkStores<DatabaseContext>()
   .AddDefaultTokenProviders();
 
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-})
-.AddGoogle(options =>
-{
-    var googleAuth = builder.Configuration.GetSection("Authentication:Google");
-    options.ClientId = googleAuth["ClientId"];
-    options.ClientSecret = googleAuth["ClientSecret"];
-})
-.AddFacebook(options =>
-{
-    var facebookAuth = builder.Configuration.GetSection("Authentication:Facebook");
-    options.AppId = facebookAuth["AppId"];
-    options.AppSecret = facebookAuth["AppSecret"];
-})
-.AddMicrosoftAccount(options =>
-{
-    var microsoftAuth = builder.Configuration.GetSection("Authentication:Microsoft");
-    options.ClientId = microsoftAuth["ClientId"];
-    options.ClientSecret = microsoftAuth["ClientSecret"];
-});
+
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ILogout, AccountAuthentication>();
-builder.Services.AddScoped<IRegister, AccountAuthentication>();
-builder.Services.AddScoped<ILogin, AccountAuthentication>();
-builder.Services.AddScoped<ISendEmail, EmailActions>();
-builder.Services.AddScoped<IFunctionsFromEmail, EmailActions>();
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ILogout, AccountAuthenticationServies>();
+builder.Services.AddScoped<IRegister, AccountAuthenticationServies>();
+builder.Services.AddScoped<ILogin, AccountAuthenticationServies>();
+
+builder.Services.AddScoped<ISendEmail, EmailActionsServies>();
+builder.Services.AddScoped<IFunctionsFromEmail, EmailActionsServies>();
+
+builder.Services.AddScoped<IPageFunctions, CreatorPageServies>();
+builder.Services.AddScoped<IPageFunctions, CreatorPageServies>();
+
+builder.Services.AddScoped<IFollow, FollowersServices>();
+builder.Services.AddScoped<IGetFollowers, FollowersServices>();
+
+
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();

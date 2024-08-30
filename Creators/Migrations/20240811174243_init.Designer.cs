@@ -4,6 +4,7 @@ using Creators.Creators.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Creators.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240811174243_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,10 +160,6 @@ namespace Creators.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Id_Creator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -168,10 +167,6 @@ namespace Creators.Migrations
                     b.Property<string>("Id_User")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProfileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Since")
                         .HasColumnType("datetime2");
@@ -299,9 +294,6 @@ namespace Creators.Migrations
 
                     b.Property<string>("Firstname")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsCreator")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");

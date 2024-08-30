@@ -18,21 +18,22 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace Creators.Creators.Services
 {
-    public class EmailActions : ISendEmail, IFunctionsFromEmail
+    public class EmailActionsServies : ISendEmail, IFunctionsFromEmail
     {
         private readonly UserManager<UserModel> _userManager;
-        private readonly ILogger<EmailActions> _logger;
+        private readonly ILogger<EmailActionsServies> _logger;
         private readonly IConfiguration _configuration;
         private readonly LinkGenerator _linkGenerator;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public EmailActions(UserManager<UserModel> userManager, ILogger<EmailActions> logger, IConfiguration configuration, LinkGenerator linkGenerator, IHttpContextAccessor httpContextAccessor)
+        private readonly IPageFunctions _pageFunctions;
+        public EmailActionsServies(UserManager<UserModel> userManager, ILogger<EmailActionsServies> logger, IConfiguration configuration, LinkGenerator linkGenerator, IHttpContextAccessor httpContextAccessor, IPageFunctions pageFunctions)
         {
             _userManager = userManager;
             _logger = logger;
             _configuration = configuration;
             _linkGenerator = linkGenerator;
             _httpContextAccessor = httpContextAccessor;
+            _pageFunctions = pageFunctions;
         }
 
         public async Task SendConfirmedEmail(string Email)
@@ -83,7 +84,6 @@ namespace Creators.Creators.Services
                 <head>
                     <meta charset='UTF-8'>
                     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                    <title>Confirm Your Email</title>
                     <style>
                         body {{
                             font-family: Arial, sans-serif;
@@ -166,13 +166,13 @@ namespace Creators.Creators.Services
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             UserModel user = await _userManager.FindByEmailAsync(Email);
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 _logger.LogInformation("Email: {Email} was successfully confirmed", Email);
             }
             else
             {
-                _logger.LogError("Failed to confirm email: {Email}", Email);  
+                _logger.LogError("Failed to confirm email: {Email}", Email);
             }
         }
 
@@ -333,6 +333,186 @@ namespace Creators.Creators.Services
                 }
             }
         }
+
+
+
+
+
+        public async Task UpdatePage(UserModel User, string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks)
+        {
+
+            if (string.IsNullOrWhiteSpace(User.Email))
+            {
+                _logger.LogError("The email address is null or empty.");
+                return;
+            }
+
+            if (User == null)
+            {
+                _logger.LogWarning($"The email address '{User.Email}' does not exist.");
+            }
+
+            try
+            {
+                var mailAddress = new MailAddress(User.Email);
+
+                var smtpSettings = _configuration.GetSection("SmtpSettings");
+
+                var smtpClient = new SmtpClient(smtpSettings["SmtpServer"])
+                {
+                    Port = int.Parse(smtpSettings["Port"]),
+                    Credentials = new NetworkCredential(smtpSettings["Username"], smtpSettings["Password"]),
+                    EnableSsl = bool.Parse(smtpSettings["EnableSsl"]),
+                };
+
+
+                var httpContext = _httpContextAccessor.HttpContext;
+
+                string callbackUrl = _linkGenerator.GetUriByAction(
+                    httpContext: httpContext,
+                    action: "UpdatePageAction",
+                    controller: "Creator",
+                    values: new { UserFromEmailId = User.Id, AccountNumber = AccountNumber, Description = Description, ProfileImage = ProfileImage, NotifyImages = NotifyImages, NotifyEvents = NotifyEvents, BioLinks = BioLinks },
+                    scheme: httpContext.Request.Scheme);
+
+                _logger.LogInformation("Generated callback URL: {CallbackUrl} for AccountNumber: {AccountNumber}", callbackUrl, AccountNumber);
+
+                string message = $@"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                        <style>
+                            body {{
+                                font-family: Arial, sans-serif;
+                                background-color: #f4f4f4;
+                                color: #333;
+                                line-height: 1.6;
+                                padding: 20px;
+                            }}
+                            .container {{
+                                max-width: 600px;
+                                margin: 0 auto;
+                                background: #fff;
+                                padding: 20px;
+                                border-radius: 8px;
+                                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            }}
+                            h1 {{
+                                color: #333;
+                            }}
+                            p {{
+                                margin-bottom: 20px;
+                            }}
+                            a.button {{
+                                display: inline-block;
+                                background-color: #007BFF;
+                                color: #fff;
+                                padding: 10px 20px;
+                                text-decoration: none;
+                                border-radius: 5px;
+                                font-weight: bold;
+                            }}
+                            .footer {{
+                                margin-top: 20px;
+                                text-align: center;
+                                font-size: 0.9em;
+                                color: #777;
+                            }}
+                        </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <h1>Update Request Received</h1>
+                        <p>Your request to update your profile has been successfully submitted. Please check your email for further details.</p>
+                        <p>If you did not initiate this request, please ignore this message or contact our support team.</p>
+                        <p><a href='{HtmlEncoder.Default.Encode(callbackUrl)}' class='button'>Update Profile</a></p>
+                        <div class='footer'>
+                            <p>&copy; 2024 Creators. All rights reserved.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
+
+                _logger.LogDebug("Email message content generated for Email: {Email}", User.Email);
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(smtpSettings["SenderEmail"], smtpSettings["SenderName"]),
+                    Subject = "Profile Update Request",
+                    Body = message,
+                    IsBodyHtml = true,
+                };
+
+                mailMessage.To.Add(mailAddress);
+
+                _logger.LogDebug("Sending email to: {Email}", User.Email, AccountNumber);
+
+                await smtpClient.SendMailAsync(mailMessage);
+
+                _logger.LogInformation("Profile update email sent successfully to {Email}", User.Email);
+            }
+            catch (FormatException ex)
+            {
+                _logger.LogError(ex, "Invalid email address format: {Email}", User.Email);
+            }
+            catch (SmtpException ex)
+            {
+                _logger.LogError(ex, "SMTP error occurred while sending email to {Email}", User.Email);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while sending email to {Email}", User.Email);
+            }
+        }
+
+
+
+        public async Task<string> UpdatePageFinalizator(string UserFromEmailId, string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks, UserModel ActualUser)
+        {
+            _logger.LogInformation("UpdatePageFinalizator started for email {Email}", ActualUser.Email);
+
+            try
+            {
+                _logger.LogDebug("Checking if ActualUser is null or does not match UserFromEmail for email {Email}", ActualUser.Email);
+
+                if (ActualUser == null || ActualUser.Id != UserFromEmailId)
+                {
+                    _logger.LogWarning("User mismatch or null user detected for ActualUser: {ActualUser}, UserFromEmail: {UserFromEmail}",
+                                       ActualUser.Id, UserFromEmailId);
+                    return "UserError";
+                }
+
+                _logger.LogInformation("Attempting to update page for email {Email}", ActualUser.Email);
+
+                string result = await _pageFunctions.UpdatePage(ActualUser, AccountNumber, Description, ProfileImage, NotifyImages, NotifyEvents, BioLinks);
+
+                _logger.LogInformation("Page update completed for email: {Email} with result: {Result}", ActualUser.Email, result);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating page for email {Email}", ActualUser.Email);
+                throw;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

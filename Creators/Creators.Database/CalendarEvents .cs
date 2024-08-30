@@ -11,8 +11,8 @@ namespace Creators.Creators.Database
         public TimeSpan Start { get; set; }
         public TimeSpan End { get; set; }
         public string Description { get; set; }
+        public CreatorPage CreatorPage { get; set; }
 
-        CreatorPage CreatorPage { get; set; }
     }
 }
   

@@ -13,6 +13,6 @@ namespace Creators.Creators.Database
         [Column(TypeName = "decimal(8, 2)")]
         public decimal Count { get; set; }
 
-        public CreatorPage CreatorPage { get; set; }
+        public CreatorPage CreatorPage { get; set; }   
     }
 }

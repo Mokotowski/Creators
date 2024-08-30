@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/creators.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Creators.styles.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -30,6 +33,24 @@
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <form method="get" asp-controller="Creator" asp-action="SearchCreator">
+                                    <button type="submit" class="nav-link btn btn-link">Search Creator</button>
+                                </form>
+                            </li>
+
+                            <li class="nav-item">
+                                <form method="get" asp-controller="Follower" asp-action="GetFollowingCreators">
+                                    <button type="submit" class="nav-link btn btn-link">My Creators</button>
+                                </form>
+                            </li>
+
+                            <li class="nav-item">
+                                <form method="get" asp-controller="Home" asp-action="MyAccount">
+                                    <button type="submit" class="nav-link btn btn-link">My Account</button>
+                                </form>
+                            </li>
+
                             <li class="nav-item">
                                 <form method="post" asp-controller="Account" asp-action="Logout">
                                     <button type="submit" class="nav-link btn btn-link">Logout</button>

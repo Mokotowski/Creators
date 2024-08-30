@@ -1,0 +1,29 @@
+﻿@model Creators.Creators.Database.UserModel
+
+@{
+    ViewData["Title"] = "My Account";
+}
+
+<h2>My Account</h2>
+
+<div class="user-info">
+    <h3>User Information</h3>
+    <p><strong>Username:</strong> @Model.UserName</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+</div>
+
+@if (ViewBag.IsCreator)
+{
+    <div class="creator-management">
+        <h3>Manage Your Creator Page</h3>
+        <a href="@Url.Action("ManageCreatorPage", "Creator")" class="btn btn-primary">Manage My Page</a>
+    </div>
+}
+else
+{
+    <div class="not-creator">
+        <p>You are not a creator. If you wish to become a creator, please check out our site to become a creator or contact support.</p>
+        <a href="@Url.Action("BecomeCreator", "Creator")" class="btn btn-primary">Become Creator</a>
+
+    </div>
+}

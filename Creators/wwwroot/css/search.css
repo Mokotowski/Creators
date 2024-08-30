@@ -1,0 +1,53 @@
+﻿.container-searchresult {
+    text-align: center;
+}
+
+.creator-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.creator-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.creator-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.profile-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.goto-page {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+    .goto-page:hover {
+        background-color: #0056b3;
+    }

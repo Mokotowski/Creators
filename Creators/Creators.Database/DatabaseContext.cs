@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Globalization;
 
 namespace Creators.Creators.Database
 {
@@ -25,52 +26,54 @@ namespace Creators.Creators.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Followers>()
-                .HasKey(f => new { f.Id_Creator, f.Id_User });
-
-            modelBuilder.Entity<Followers>()
                 .HasOne<UserModel>()
                 .WithMany(u => u.Followers)
-                .HasForeignKey(f => f.Id_User);
+                .HasForeignKey(f => f.Id_User)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CreatorPage>()
-                .HasOne<UserModel>()
-                .WithOne(u => u.CreatorPage)
+                .HasOne(d => d.User)
+                .WithMany(c => c.Creators)
+                .HasForeignKey(d => d.Id_Creator);
+
+            modelBuilder.Entity<CreatorPage>()
+                .HasOne(s => s.PageData)
+                .WithOne(c => c.CreatorPage)
                 .HasForeignKey<CreatorPage>(s => s.Id_Creator);
 
-            modelBuilder.Entity<PageData>()
-                .HasOne<CreatorPage>()
-                .WithOne(u => u.PageData)
-                .HasForeignKey<PageData>(s => s.Id_Creator);
-
             modelBuilder.Entity<Donates>()
-                .HasOne<CreatorPage>()
-                .WithMany(u => u.Donates)
-                .HasForeignKey(f => f.Id_Donates);
+                .HasOne(d => d.CreatorPage)
+                .WithMany(c => c.Donates)
+                .HasForeignKey(d => d.Id_Donates);
 
             modelBuilder.Entity<CalendarEvents>()
-                .HasOne<CreatorPage>()
-                .WithMany(u => u.CalendarEvents)
-                .HasForeignKey(f => f.Id_Calendar);
+                .HasOne(d => d.CreatorPage)
+                .WithMany(c => c.CalendarEvents)
+                .HasForeignKey(d => d.Id_Calendar);
+
+            modelBuilder.Entity<CreatorPhoto>()
+                .HasOne(d => d.CreatorPage)
+                .WithMany(c => c.CreatorPhotos)
+                .HasForeignKey(d => d.Id_Photos);
 
 
             modelBuilder.Entity<CreatorPhoto>()
-                .HasOne<CreatorPage>()
-                .WithMany(u => u.CreatorPhotos)
-                .HasForeignKey(f => f.Id_Photos);
-
+                .HasOne(d => d.CreatorPage)
+                .WithMany(c => c.CreatorPhotos)
+                .HasForeignKey(d => d.Id_Photos);
 
             modelBuilder.Entity<PhotoHearts>()
-                .HasOne<CreatorPhoto>()
-                .WithMany(u => u.PhotoHearts)
-                .HasForeignKey(f => f.HeartGroup)
-                .HasPrincipalKey(u => u.HeartGroup);
+                .HasOne(d => d.CreatorPhoto)
+                .WithMany(c => c.Hearts)
+                .HasForeignKey(d => d.HeartGroup)
+                .HasPrincipalKey(c => c.HeartGroup);
+
 
             modelBuilder.Entity<PhotoComments>()
-                .HasOne<CreatorPhoto>()
-                .WithMany(u => u.PhotoComments)
-                .HasForeignKey(f => f.CommentsGroup)
-                .HasPrincipalKey(u => u.CommentsGroup);
-
+                .HasOne(d => d.CreatorPhoto)
+                .WithMany(c => c.Comments)
+                .HasForeignKey(d => d.CommentsGroup)
+                .HasPrincipalKey(c => c.HeartGroup);
 
 
             base.OnModelCreating(modelBuilder);
