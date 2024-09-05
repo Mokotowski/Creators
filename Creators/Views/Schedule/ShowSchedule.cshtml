@@ -1,0 +1,46 @@
+﻿@model List<Creators.Creators.Database.CalendarEvents>
+@section Styles {
+    <link rel="stylesheet" href="~/css/schedule.css" />
+}
+
+@{
+    ViewData["Title"] = "Event Calendar";
+    var currentDate = DateOnly.FromDateTime(DateTime.Now);
+    var pastLimit = currentDate.AddMonths(-1);
+}
+
+<div id="calendar-container">
+    <h2 id="calendar-title">Event Calendar</h2>
+
+    <table id="event-calendar-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var events in Model)
+            {
+                if (events.DateOnly >= pastLimit)
+            {
+            <tr>
+                <td>@events.DateOnly.ToString("yyyy-MM-dd")</td>
+                <td>@events.Start</td>
+                <td>@events.End</td>
+                <td>@events.Description</td>
+            </tr>
+        }
+    }
+        </tbody>
+    </table>
+
+    @if (ViewBag.User.IsCreator)
+    {
+    <div id="manage-link-container">
+        <a id="manage-events-link" href="@Url.Action("ScheduleManage", "Schedule", new { Id_Calendar = ViewBag.User.Id })">Manage Events</a>
+    </div>
+    }
+</div>

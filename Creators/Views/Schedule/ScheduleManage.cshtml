@@ -1,0 +1,77 @@
+﻿@model List<Creators.Creators.Database.CalendarEvents>
+@section Styles {
+    <link rel="stylesheet" href="~/css/manage-schedule.css" />
+}
+
+@{
+    ViewData["Title"] = "Manage Calendar Events";
+    var currentDate = DateOnly.FromDateTime(DateTime.Now);
+}
+
+<div id="manage-events-container">
+    <h2 id="manage-title">Manage Events</h2>
+
+    <form method="post" action="@Url.Action("AddEvent", "Schedule")" id="add-event-form">
+        <h3>Add New Event</h3>
+        <div class="form-group">
+            <label for="event-date">Date:</label>
+            <input type="date" id="event-date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="event-start">Start Time:</label>
+            <input type="time" id="event-start" name="start" required>
+        </div>
+        <div class="form-group">
+            <label for="event-end">End Time:</label>
+            <input type="time" id="event-end" name="end" required>
+        </div>
+        <div class="form-group">
+            <label for="event-description">Description:</label>
+            <input type="text" id="event-description" name="description" required>
+        </div>
+        <button type="submit" id="add-event-button">Add Event</button>
+    </form>
+
+    <h3 id="event-list-title">Event List</h3>
+
+    <table id="event-manage-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var events in Model)
+            {
+            <tr>
+                    <td>@events.DateOnly.ToString("yyyy-MM-dd")</td>
+                    <td>@events.Start</td>
+                    <td>@events.End</td>
+                    <td>@events.Description</td>
+                <td>
+                        @if (events.DateOnly >= currentDate)
+                            {
+                    <form method="post" action="@Url.Action("UpdateEvent", "Schedule")" class="manage-inline-form">
+                                <input type="hidden" name="Id" value="@events.Id" />
+                                <input type="date" name="date" value="@events.DateOnly" required>
+                                <input type="time" name="start" value="@events.Start" required>
+                                <input type="time" name="end" value="@events.End" required>
+                                <input type="text" name="description" value="@events.Description" required>
+                        <button type="submit" class="update-event-button">Update</button>
+                    </form>
+
+                    <form method="post" action="@Url.Action("DeleteEvent", "Schedule")" class="manage-inline-form">
+                                <input type="hidden" name="Id" value="@events.Id" />
+                        <button type="submit" class="delete-event-button">Delete</button>
+                    </form>
+    }
+                </td>
+            </tr>
+}
+        </tbody>
+    </table>
+</div>

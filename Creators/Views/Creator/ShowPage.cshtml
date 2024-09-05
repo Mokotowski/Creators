@@ -14,6 +14,10 @@
         <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = @Model.Id_Creator })" class="goto-page">Check creator fans</a>
     </div>
 
+    <div class="creator-info followers">
+        <a href="@Url.Action("ShowSchedule", "Schedule", new { Id_Calendar = @Model.Id_Calendar })" class="goto-page">Show events calendar</a>
+    </div>
+
     <div class="following">
         @if (ViewBag.IsFollowing)
         {

@@ -18,7 +18,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace Creators.Creators.Services
 {
-    public class EmailActionsServies : ISendEmail, IFunctionsFromEmail
+    public class EmailActionsServies : ISendEmail, IFunctionsFromEmail, INotificationEmail
     {
         private readonly UserManager<UserModel> _userManager;
         private readonly ILogger<EmailActionsServies> _logger;
@@ -499,6 +499,120 @@ namespace Creators.Creators.Services
             }
         }
 
+        public async Task SendNotificationAddCalendarEmail(string email, string Id_Calendar, DateOnly date, TimeSpan start, TimeSpan end, string description, string Nick)
+        {
+            try
+            {
+                _logger.LogInformation("Starting to send notification email for event. Recipient: {Email}, Calendar ID: {IdCalendar}, Date: {Date}", email, Id_Calendar, date);
+
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(Id_Calendar))
+                {
+                    _logger.LogWarning("Email address or Calendar ID is null or empty. Email: {Email}, Calendar ID: {IdCalendar}", email, Id_Calendar);
+                    throw new ArgumentException("Email address and Calendar ID must be provided.");
+                }
+
+                var mailAddress = new MailAddress(email);
+
+                var smtpSettings = _configuration.GetSection("SmtpSettings");
+
+                var smtpClient = new SmtpClient(smtpSettings["SmtpServer"])
+                {
+                    Port = int.Parse(smtpSettings["Port"]),
+                    Credentials = new NetworkCredential(smtpSettings["Username"], smtpSettings["Password"]),
+                    EnableSsl = bool.Parse(smtpSettings["EnableSsl"]),
+                };
+
+                var httpContext = _httpContextAccessor.HttpContext;
+                string callbackUrl = _linkGenerator.GetUriByAction(
+                    httpContext: httpContext,
+                    action: "ShowSchedule",
+                    controller: "Schedule",
+                    values: new { Id_Calendar = Id_Calendar },
+                    scheme: httpContext.Request.Scheme);
+
+                string message = $@"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            color: #333;
+                            line-height: 1.6;
+                            padding: 20px;
+                        }}
+                        .container {{
+                            max-width: 600px;
+                            margin: 0 auto;
+                            background: #fff;
+                            padding: 20px;
+                            border-radius: 8px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }}
+                        h1 {{
+                            color: #333;
+                        }}
+                        p {{
+                            margin-bottom: 20px;
+                        }}
+                        a.button {{
+                            display: inline-block;
+                            background-color: #007BFF;
+                            color: #fff;
+                            padding: 10px 20px;
+                            text-decoration: none;
+                            border-radius: 5px;
+                            font-weight: bold;
+                        }}
+                        .footer {{
+                            margin-top: 20px;
+                            text-align: center;
+                            font-size: 0.9em;
+                            color: #777;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <h1>New Event Added</h1>
+                        <p>Hello,</p>
+                        <p>A new event has been added to the calendar by <strong>{Nick}</strong>, a creator you are following.</p>
+                        <p><strong>Date:</strong> {date.ToString("yyyy-MM-dd")}</p>
+                        <p><strong>Time:</strong> {start.ToString(@"hh\:mm")} - {end.ToString(@"hh\:mm")}</p>
+                        <p><strong>Description:</strong> {description}</p>
+                        <p>To view this event, please follow the link below:</p>
+                        <p><a href='{HtmlEncoder.Default.Encode(callbackUrl)}' class='button'>View Event</a></p>
+                        <div class='footer'>
+                            <p>&copy; 2024 Creators. All rights reserved.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
+
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(smtpSettings["SenderEmail"], smtpSettings["SenderName"]),
+                    Subject = "Event Notification",
+                    Body = message,
+                    IsBodyHtml = true,
+                };
+
+                mailMessage.To.Add(mailAddress);
+
+                await smtpClient.SendMailAsync(mailMessage);
+
+                _logger.LogInformation("Notification email successfully sent to {Email} for calendar {IdCalendar}.", email, Id_Calendar);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while sending notification email for calendar {IdCalendar} to {Email}.", Id_Calendar, email);
+                throw;
+            }
+        }
 
 
 

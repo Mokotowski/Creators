@@ -160,6 +160,7 @@ namespace Creators.Creators.Services
                 _logger.LogInformation("Retrieving page data for user with ID: {Id_Creator}", Id_Creator);
 
                 var pageData = await _databaseContext.PageData.FindAsync(Id_Creator);
+                var creatorPage = await _databaseContext.CreatorPage.FindAsync(Id_Creator);
 
                 if (pageData == null)
                 {
@@ -172,7 +173,8 @@ namespace Creators.Creators.Services
                     pageData.Description,
                     pageData.ProfilPicture,
                     pageData.BioLinks,
-                    pageData.Id_Creator
+                    pageData.Id_Creator,
+                    creatorPage.Id_Calendar
                 );
 
                 _logger.LogInformation("Successfully retrieved page data for user with ID: {Id_Creator}", Id_Creator);

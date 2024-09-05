@@ -10,6 +10,7 @@
         public string BioLinks { get; set; }
         public bool NotifyEvents { get; set; }
         public bool NotifyImages { get; set; }
+        public string Id_Calendar { get; set; }
 
         public CreatorPageShow(string accountNumber, string description, string profilPicture, string bioLinks, bool notifyEvents, bool notifyImages, string id_Creator)
         {
@@ -22,13 +23,14 @@
             Id_Creator = id_Creator;
         }
 
-        public CreatorPageShow(string profilName, string description, string profilPicture, string bioLinks, string id_Creator)
+        public CreatorPageShow(string profilName, string description, string profilPicture, string bioLinks, string id_Creator, string id_Calendar)
         {
             ProfilName = profilName;
             Description = description;
             ProfilPicture = profilPicture;
             BioLinks = bioLinks;    
             Id_Creator = id_Creator;
+            Id_Calendar = id_Calendar;
         }
 
     }

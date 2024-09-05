@@ -50,6 +50,8 @@ builder.Services.AddScoped<ILogin, AccountAuthenticationServies>();
 
 builder.Services.AddScoped<ISendEmail, EmailActionsServies>();
 builder.Services.AddScoped<IFunctionsFromEmail, EmailActionsServies>();
+builder.Services.AddScoped<INotificationEmail, EmailActionsServies>();
+
 
 builder.Services.AddScoped<IPageFunctions, CreatorPageServies>();
 builder.Services.AddScoped<IPageFunctions, CreatorPageServies>();
@@ -57,7 +59,7 @@ builder.Services.AddScoped<IPageFunctions, CreatorPageServies>();
 builder.Services.AddScoped<IFollow, FollowersServices>();
 builder.Services.AddScoped<IGetFollowers, FollowersServices>();
 
-
+builder.Services.AddScoped<IEventsFunctions, ScheduleServices>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
