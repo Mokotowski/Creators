@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Creators.Creators.Models.CreatorPageShow
+
+@{
     ViewBag.Title = "Manage Creator Page";
 }
 
@@ -6,16 +8,25 @@
     <h1>Manage Your Creator Page</h1>
 
     <div class="action-list">
-        <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = ViewBag.Id_Creator })" class="btn btn-primary">
+        <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-primary">
             View Your Page
         </a>
 
-        <a href="@Url.Action("UpdatePage", "Creator", new { Id_Creator = ViewBag.Id_Creator })" class="btn btn-warning">
+        <a href="@Url.Action("UpdatePage", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-warning">
             Edit Your Page
         </a>
 
-        <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = ViewBag.Id_Creator })" class="btn btn-info">
+        <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = Model.Id_Creator })" class="btn btn-info">
             View Your Followers
         </a>
+
+        <a href="@Url.Action("CheckDonates", "Donate", new { Id_Donates = Model.Id_Donates })" class="btn btn-primary">
+            Check Donates
+        </a>
+
+        <a href="@Url.Action("Payout", "Donate")" class="btn btn-primary">
+            Make Payout
+        </a>
+
     </div>
 </div>

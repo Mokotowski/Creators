@@ -54,6 +54,29 @@ namespace Creators.Migrations
                     b.ToTable("CalendarEvents");
                 });
 
+            modelBuilder.Entity("Creators.Creators.Database.CreatorBalance", b =>
+                {
+                    b.Property<string>("Id_Donates")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(9, 2)");
+
+                    b.Property<string>("Id_Creator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastCashout")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastDeposit")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id_Donates");
+
+                    b.ToTable("CreatorBalance");
+                });
+
             modelBuilder.Entity("Creators.Creators.Database.CreatorPage", b =>
                 {
                     b.Property<string>("Id_Creator")
@@ -128,8 +151,12 @@ namespace Creators.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Count")
-                        .HasColumnType("decimal(8, 2)");
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
@@ -141,6 +168,10 @@ namespace Creators.Migrations
                     b.Property<string>("Id_Donates")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -496,6 +527,17 @@ namespace Creators.Migrations
                     b.Navigation("CreatorPage");
                 });
 
+            modelBuilder.Entity("Creators.Creators.Database.CreatorBalance", b =>
+                {
+                    b.HasOne("Creators.Creators.Database.CreatorPage", "CreatorPage")
+                        .WithOne("CreatorBalance")
+                        .HasForeignKey("Creators.Creators.Database.CreatorBalance", "Id_Donates")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatorPage");
+                });
+
             modelBuilder.Entity("Creators.Creators.Database.CreatorPage", b =>
                 {
                     b.HasOne("Creators.Creators.Database.UserModel", "User")
@@ -632,6 +674,9 @@ namespace Creators.Migrations
             modelBuilder.Entity("Creators.Creators.Database.CreatorPage", b =>
                 {
                     b.Navigation("CalendarEvents");
+
+                    b.Navigation("CreatorBalance")
+                        .IsRequired();
 
                     b.Navigation("CreatorPhotos");
 

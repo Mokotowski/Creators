@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Creators.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240808145336_Followers")]
-    partial class Followers
+    [Migration("20240910190738_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,41 +40,59 @@ namespace Creators.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeOnly>("End")
+                    b.Property<TimeSpan>("End")
                         .HasColumnType("time");
 
                     b.Property<string>("Id_Calendar")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<TimeOnly>("Start")
+                    b.Property<TimeSpan>("Start")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Id_Calendar");
+
                     b.ToTable("CalendarEvents");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.CreatorBalance", b =>
+                {
+                    b.Property<string>("Id_Donates")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(9, 2)");
+
+                    b.Property<string>("Id_Creator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastCashout")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastDeposit")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id_Donates");
+
+                    b.ToTable("CreatorBalance");
                 });
 
             modelBuilder.Entity("Creators.Creators.Database.CreatorPage", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id_Creator")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Account_Balance")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<string>("Account_Numer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Id_Calendar")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Id_Creator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -87,9 +105,9 @@ namespace Creators.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Site_Commission")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(5, 2)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id_Creator");
 
                     b.ToTable("CreatorPage");
                 });
@@ -106,19 +124,24 @@ namespace Creators.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HeartGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Id_Photos")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id_Photos");
 
                     b.ToTable("CreatorPhoto");
                 });
@@ -131,49 +154,79 @@ namespace Creators.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Count")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Donator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id_Donates")
-                        .HasColumnType("int");
+                    b.Property<string>("Id_Donates")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<TimeOnly>("Time")
-                        .HasColumnType("time");
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id_Donates");
 
                     b.ToTable("Donates");
                 });
 
             modelBuilder.Entity("Creators.Creators.Database.Followers", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Id_Creator")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Id_User")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id_Creator", "Id_User");
+                    b.Property<string>("ProfileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Since")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserModelId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("Id_User");
+
+                    b.HasIndex("UserModelId");
 
                     b.ToTable("Followers");
                 });
 
             modelBuilder.Entity("Creators.Creators.Database.PageData", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id_Creator")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BioLinks")
                         .IsRequired()
@@ -183,7 +236,10 @@ namespace Creators.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EmailNotificationsEnabled")
+                    b.Property<bool>("EmailNotificationsEvents")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EmailNotificationsPhoto")
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilName")
@@ -194,7 +250,7 @@ namespace Creators.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id_Creator");
 
                     b.ToTable("PageData");
                 });
@@ -209,7 +265,7 @@ namespace Creators.Migrations
 
                     b.Property<string>("CommentsGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
@@ -229,6 +285,8 @@ namespace Creators.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommentsGroup");
+
                     b.ToTable("PhotoComments");
                 });
 
@@ -242,12 +300,14 @@ namespace Creators.Migrations
 
                     b.Property<string>("HeartGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Id_User")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HeartGroup");
 
                     b.ToTable("PhotoHearts");
                 });
@@ -273,6 +333,9 @@ namespace Creators.Migrations
 
                     b.Property<string>("Firstname")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCreator")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");
@@ -456,13 +519,108 @@ namespace Creators.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Creators.Creators.Database.CalendarEvents", b =>
+                {
+                    b.HasOne("Creators.Creators.Database.CreatorPage", "CreatorPage")
+                        .WithMany("CalendarEvents")
+                        .HasForeignKey("Id_Calendar")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatorPage");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.CreatorBalance", b =>
+                {
+                    b.HasOne("Creators.Creators.Database.CreatorPage", "CreatorPage")
+                        .WithOne("CreatorBalance")
+                        .HasForeignKey("Creators.Creators.Database.CreatorBalance", "Id_Donates")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatorPage");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.CreatorPage", b =>
+                {
+                    b.HasOne("Creators.Creators.Database.UserModel", "User")
+                        .WithMany("Creators")
+                        .HasForeignKey("Id_Creator")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Creators.Creators.Database.PageData", "PageData")
+                        .WithOne("CreatorPage")
+                        .HasForeignKey("Creators.Creators.Database.CreatorPage", "Id_Creator")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PageData");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.CreatorPhoto", b =>
+                {
+                    b.HasOne("Creators.Creators.Database.CreatorPage", "CreatorPage")
+                        .WithMany("CreatorPhotos")
+                        .HasForeignKey("Id_Photos")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatorPage");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.Donates", b =>
+                {
+                    b.HasOne("Creators.Creators.Database.CreatorPage", "CreatorPage")
+                        .WithMany("Donates")
+                        .HasForeignKey("Id_Donates")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatorPage");
+                });
+
             modelBuilder.Entity("Creators.Creators.Database.Followers", b =>
                 {
                     b.HasOne("Creators.Creators.Database.UserModel", null)
                         .WithMany("Followers")
                         .HasForeignKey("Id_User")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Creators.Creators.Database.UserModel", "UserModel")
+                        .WithMany()
+                        .HasForeignKey("UserModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("UserModel");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.PhotoComments", b =>
+                {
+                    b.HasOne("Creators.Creators.Database.CreatorPhoto", "CreatorPhoto")
+                        .WithMany("Comments")
+                        .HasForeignKey("CommentsGroup")
+                        .HasPrincipalKey("HeartGroup")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatorPhoto");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.PhotoHearts", b =>
+                {
+                    b.HasOne("Creators.Creators.Database.CreatorPhoto", "CreatorPhoto")
+                        .WithMany("Hearts")
+                        .HasForeignKey("HeartGroup")
+                        .HasPrincipalKey("HeartGroup")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatorPhoto");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -516,8 +674,35 @@ namespace Creators.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Creators.Creators.Database.CreatorPage", b =>
+                {
+                    b.Navigation("CalendarEvents");
+
+                    b.Navigation("CreatorBalance")
+                        .IsRequired();
+
+                    b.Navigation("CreatorPhotos");
+
+                    b.Navigation("Donates");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.CreatorPhoto", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Hearts");
+                });
+
+            modelBuilder.Entity("Creators.Creators.Database.PageData", b =>
+                {
+                    b.Navigation("CreatorPage")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Creators.Creators.Database.UserModel", b =>
                 {
+                    b.Navigation("Creators");
+
                     b.Navigation("Followers");
                 });
 #pragma warning restore 612, 618

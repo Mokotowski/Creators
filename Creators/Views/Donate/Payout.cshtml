@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Payout";
+}
+
+<h2>Payout</h2>
+
+<form method="post" action="@Url.Action("Payout")">
+    <div class="form-group">
+        <label for="amount">Amount in $:</label>
+        <input type="number" name="amount" id="amount" class="form-control" step="1" min="1" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

@@ -20,7 +20,7 @@ namespace Creators.Creators.Database
         public DbSet<PhotoComments> PhotoComments { get; set; }
         public DbSet<PhotoHearts> PhotoHearts { get; set; }
         public DbSet<Followers> Followers { get; set; }
-
+        public DbSet<CreatorBalance> CreatorBalance { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,6 +74,12 @@ namespace Creators.Creators.Database
                 .WithMany(c => c.Comments)
                 .HasForeignKey(d => d.CommentsGroup)
                 .HasPrincipalKey(c => c.HeartGroup);
+
+            modelBuilder.Entity<CreatorPage>()
+               .HasOne(c => c.CreatorBalance)
+               .WithOne(d => d.CreatorPage)
+               .HasForeignKey<CreatorBalance>(d => d.Id_Donates);
+
 
 
             base.OnModelCreating(modelBuilder);

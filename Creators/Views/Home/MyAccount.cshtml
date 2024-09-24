@@ -12,6 +12,10 @@
     <p><strong>Email:</strong> @Model.Email</p>
 </div>
 
+<h3>Check Your Send Donates</h3>
+<a href="@Url.Action("CheckSendDonates", "Donate")" class="btn btn-primary">Check Donates</a>
+
+
 @if (ViewBag.IsCreator)
 {
     <div class="creator-management">

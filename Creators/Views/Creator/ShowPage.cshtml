@@ -2,6 +2,11 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/creatorPage.css" />
+    <style>
+        .btn-primary {
+            margin: 5px; /* Dodaj marginesy 5px do przycisków */
+        }
+    </style>
 }
 
 <div class="container">
@@ -11,27 +16,32 @@
     </div>
 
     <div class="creator-info followers">
-        <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = @Model.Id_Creator })" class="goto-page">Check creator fans</a>
+        <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">Check creator fans</a>
     </div>
 
     <div class="creator-info followers">
-        <a href="@Url.Action("ShowSchedule", "Schedule", new { Id_Calendar = @Model.Id_Calendar })" class="goto-page">Show events calendar</a>
+        <a href="@Url.Action("ShowSchedule", "Schedule", new { Id_Calendar = @Model.Id_Calendar })" class="btn btn-primary">Show events calendar</a>
+    </div>
+
+    <div class="donate-section">
+        <a href="@Url.Action("DonateCreator", "Donate", new { Creator = @Model.ProfilName, Id_Donates = @Model.Id_Donates })" class="btn btn-primary">Donate Now</a>
     </div>
 
     <div class="following">
         @if (ViewBag.IsFollowing)
         {
-            <a href="@Url.Action("UnFollow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="goto-page">UnFollow</a>
+            <a href="@Url.Action("UnFollow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">UnFollow</a>
         }
         else
         {
-            <a href="@Url.Action("Follow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="goto-page">Follow</a>
-
+            <a href="@Url.Action("Follow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">Follow</a>
         }
     </div>
+
     <div class="profile-description">
         <p>@Model.Description</p>
     </div>
+
     <div class="profile-links">
         <h2>Find me on:</h2>
         <ul>

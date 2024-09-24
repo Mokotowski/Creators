@@ -227,7 +227,6 @@ namespace Creators.Creators.Services
                     <head>
                         <meta charset='UTF-8'>
                         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                        <title>Resetowanie hasła</title>
                         <style>
                             body {{
                                 font-family: Arial, sans-serif;
@@ -378,11 +377,11 @@ namespace Creators.Creators.Services
                 _logger.LogInformation("Generated callback URL: {CallbackUrl} for AccountNumber: {AccountNumber}", callbackUrl, AccountNumber);
 
                 string message = $@"
-                <!DOCTYPE html>
-                <html lang='en'>
-                <head>
-                    <meta charset='UTF-8'>
-                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <!DOCTYPE html>
+                    <html lang='en'>
+                    <head>
+                        <meta charset='UTF-8'>
+                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                         <style>
                             body {{
                                 font-family: Arial, sans-serif;
@@ -421,19 +420,20 @@ namespace Creators.Creators.Services
                                 color: #777;
                             }}
                         </style>
-                </head>
-                <body>
-                    <div class='container'>
-                        <h1>Update Request Received</h1>
-                        <p>Your request to update your profile has been successfully submitted. Please check your email for further details.</p>
-                        <p>If you did not initiate this request, please ignore this message or contact our support team.</p>
-                        <p><a href='{HtmlEncoder.Default.Encode(callbackUrl)}' class='button'>Update Profile</a></p>
-                        <div class='footer'>
-                            <p>&copy; 2024 Creators. All rights reserved.</p>
+                    </head>
+                    <body>
+                        <div class='container'>
+                            <h1>Update Request Received</h1>
+                            <p>Your request to update your profile has been successfully submitted. Please check your email for further details.</p>
+                            <p>If you did not initiate this request, please ignore this message or contact our support team.</p>
+                            <p><a href='{callbackUrl}' class='button'>Update Profile</a></p>
+                            <div class='footer'>
+                                <p>&copy; 2024 Creators. All rights reserved.</p>
+                            </div>
                         </div>
-                    </div>
-                </body>
-                </html>";
+                    </body>
+                    </html>";
+
 
                 _logger.LogDebug("Email message content generated for Email: {Email}", User.Email);
 

@@ -12,3 +12,4 @@ namespace Creators.Creators.Services.Interface
         public Task<List<CreatorsSearch>> FindCreators(string ProfileName);
     }
 }
+ 

@@ -62,8 +62,19 @@ namespace Creators.Creators.Services
                         CreatorPage = page
                     };
 
-                    _databaseContext.PageData.Add(data);
+                    var balance = new CreatorBalance
+                    {
+                        Id_Creator = user.Id,  
+                        Balance = 0,
+                        LastCashout = DateTime.Now,
+                        LastDeposit = DateTime.Now,
+                        CreatorPage = page
+                    };
+
                     _databaseContext.CreatorPage.Add(page);
+                    _databaseContext.PageData.Add(data);
+                    _databaseContext.CreatorBalance.Add(balance);
+
                     await _databaseContext.SaveChangesAsync();
 
                     _logger.LogInformation("Page created successfully for user {UserId}.", user.Id);
@@ -174,7 +185,8 @@ namespace Creators.Creators.Services
                     pageData.ProfilPicture,
                     pageData.BioLinks,
                     pageData.Id_Creator,
-                    creatorPage.Id_Calendar
+                    creatorPage.Id_Calendar,
+                    creatorPage.Id_Donates
                 );
 
                 _logger.LogInformation("Successfully retrieved page data for user with ID: {Id_Creator}", Id_Creator);
@@ -221,8 +233,8 @@ namespace Creators.Creators.Services
                     pageData.BioLinks,
                     pageData.EmailNotificationsPhoto,
                     pageData.EmailNotificationsEvents,
-                    pageData.Id_Creator
-
+                    pageData.Id_Creator,
+                    creatorPage.Id_Donates
                 );
 
                 _logger.LogInformation("Successfully retrieved page and creator data for update with ID: {Id_Creator}", Id_Creator);

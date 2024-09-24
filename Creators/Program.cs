@@ -17,6 +17,15 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
+builder.Services.AddDistributedMemoryCache(); 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
 // Configure Identity.
 builder.Services.AddIdentity<UserModel, IdentityRole>(options =>
 {
@@ -43,6 +52,8 @@ builder.Services.AddIdentity<UserModel, IdentityRole>(options =>
 
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+
 
 builder.Services.AddScoped<ILogout, AccountAuthenticationServies>();
 builder.Services.AddScoped<IRegister, AccountAuthenticationServies>();
@@ -60,6 +71,11 @@ builder.Services.AddScoped<IFollow, FollowersServices>();
 builder.Services.AddScoped<IGetFollowers, FollowersServices>();
 
 builder.Services.AddScoped<IEventsFunctions, ScheduleServices>();
+
+builder.Services.AddScoped<IPaypalPay, PaypalServices>();
+builder.Services.AddScoped<IPaypalPayout, PaypalServices>();
+
+builder.Services.AddScoped<IDonatesInfo, DonateServices>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
@@ -80,7 +96,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

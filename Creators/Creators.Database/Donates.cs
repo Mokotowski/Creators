@@ -10,8 +10,9 @@ namespace Creators.Creators.Database
         public string Id_Donates { get; set; }
         public string Donator {  get; set; }
         public DateTime DateTime {  get; set; }
-        [Column(TypeName = "decimal(8, 2)")]
-        public decimal Count { get; set; }
+        public int Count { get; set; }
+        public string Currency { get; set; }
+        public string PaymentId { get; set; }
 
         public CreatorPage CreatorPage { get; set; }   
     }

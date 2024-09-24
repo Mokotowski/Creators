@@ -44,7 +44,8 @@ namespace Creators.Creators.Services
                 Lastname = LastName,
                 UserName = Nick,
                 Email = Email,
-                PhoneNumber = PhoneNumber
+                PhoneNumber = PhoneNumber,
+                IsCreator = false
             };
 
             var result = await _userManager.CreateAsync(user, Password);

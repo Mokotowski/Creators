@@ -32,6 +32,7 @@ namespace Creators.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Firstname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Lastname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsCreator = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -181,6 +182,8 @@ namespace Creators.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Id_Creator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Id_User = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Since = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -256,6 +259,27 @@ namespace Creators.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CreatorBalance",
+                columns: table => new
+                {
+                    Id_Donates = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id_Creator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(9,2)", nullable: false),
+                    LastCashout = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastDeposit = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CreatorBalance", x => x.Id_Donates);
+                    table.ForeignKey(
+                        name: "FK_CreatorBalance_CreatorPage_Id_Donates",
+                        column: x => x.Id_Donates,
+                        principalTable: "CreatorPage",
+                        principalColumn: "Id_Creator",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CreatorPhoto",
                 columns: table => new
                 {
@@ -288,7 +312,9 @@ namespace Creators.Migrations
                     Id_Donates = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Donator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Count = table.Column<decimal>(type: "decimal(8,2)", nullable: false)
+                    Count = table.Column<int>(type: "int", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -440,6 +466,9 @@ namespace Creators.Migrations
 
             migrationBuilder.DropTable(
                 name: "CalendarEvents");
+
+            migrationBuilder.DropTable(
+                name: "CreatorBalance");
 
             migrationBuilder.DropTable(
                 name: "Donates");

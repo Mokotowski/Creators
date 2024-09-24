@@ -134,8 +134,10 @@ namespace Creators.Creators.Controllers
             UserModel user = await _userManager.GetUserAsync(User);
             if(user.IsCreator)
             {
-                ViewBag.Id_Creator = user.Id;
-                return View();
+                CreatorPageShow pageShow = await _pageFunctions.GetPageForUpdate(user.Id);
+
+
+                return View(pageShow);
             }
             else
             {

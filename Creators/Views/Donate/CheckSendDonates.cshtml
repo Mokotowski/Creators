@@ -1,0 +1,39 @@
+﻿@model List<Creators.Creators.Models.DonateUserForView>
+@section Styles {
+    <link rel="stylesheet" href="~/css/donates-list.css" />
+}
+@{
+    ViewData["Title"] = "Your Donations";
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <div id="donates-section">
+        <h2>Donations</h2>
+        <table id="donates-table">
+            <thead>
+                <tr>
+                    <th>Creator</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var donate in Model.OrderByDescending(d => d.DateTime))
+                {
+                    <tr>
+                        <td>@donate.Creator</td>
+                        <td>@donate.DateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@donate.Count</td>
+                        <td>@donate.Currency</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>You haven't made any donations yet.</p>
+}

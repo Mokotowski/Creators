@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Donate to Creator";
+}
+
+<h2>Support the Creator</h2>
+
+<p>Thank you for considering a donation! Your support helps in the development and growth of the creator's work. By contributing, you are playing a crucial role in helping them achieve their goals and continue their creative endeavors.</p>
+
+<form asp-action="DonateCreator" method="post">
+    <div class="form-group">
+        <p class="form-text">You are about to support the creator: <strong>@ViewBag.Creator</strong></p>
+        <input type="hidden" id="creator" name="creator" value="@ViewBag.Creator" />
+        <input type="hidden" id="Id_Donates" name="Id_Donates" value="@ViewBag.Id_Donates" />
+
+    </div>
+
+
+    <div class="form-group">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" step="1" min="1" required class="form-control" pattern="\d+" title="Please enter a valid whole number" />
+    </div>
+
+    <div class="form-group">
+        <label for="currency">Currency:</label>
+        <select id="currency" name="currency" class="form-control">
+            <option value="USD">USD - US Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="PLN">PLN - Polish Zloty</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="JPY">JPY - Japanese Yen</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Donate</button>
+</form>

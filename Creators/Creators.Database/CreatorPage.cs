@@ -20,6 +20,7 @@ namespace Creators.Creators.Database
 
         public UserModel User { get; set; }
         public PageData PageData { get; set; }
+        public CreatorBalance CreatorBalance { get; set; }  
         public List<Donates> Donates { get; set; }
         public List<CalendarEvents> CalendarEvents { get; set; }
         public List<CreatorPhoto> CreatorPhotos { get; set; }
