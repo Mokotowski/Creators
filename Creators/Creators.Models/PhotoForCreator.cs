@@ -1,23 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Creators.Creators.Database;
 
-namespace Creators.Creators.Database
+namespace Creators.Creators.Models
 {
-    public class CreatorPhoto
+    public class PhotoForCreator
     {
-        [Key]
         public int Id { get; set; }
         public string Id_Photos { get; set; }
         public string CommentsGroup { get; set; }
         public string HeartGroup { get; set; }
         public string Description { get; set; }
         public bool CommentsOpen { get; set; }
-        public string File {  get; set; }
+        public string File { get; set; }
         public string FileExtension { get; set; }
         public DateTime DateTime { get; set; }
 
-        public CreatorPage CreatorPage { get; set; }
-
-        public List<PhotoComments> Comments { get; set; }
+        public List<PhotoComments> comments { get; set; }
         public List<PhotoHearts> Hearts { get; set; }
     }
 }

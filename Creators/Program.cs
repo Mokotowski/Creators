@@ -77,6 +77,14 @@ builder.Services.AddScoped<IPaypalPayout, PaypalServices>();
 
 builder.Services.AddScoped<IDonatesInfo, DonateServices>();
 
+
+builder.Services.AddScoped<ILikes, PhotoActionsServices>();
+builder.Services.AddScoped<IComments, PhotoActionsServices>();
+builder.Services.AddScoped<IPhotosManage, PhotosManagerServices>();
+builder.Services.AddScoped<IPhotoDataGet, PhotoDataServices>();
+
+
+
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
