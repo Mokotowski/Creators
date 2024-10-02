@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Creators.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240910190738_init")]
-    partial class init
+    [Migration("20241001143415_init5")]
+    partial class init5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,12 +122,23 @@ namespace Creators.Migrations
 
                     b.Property<string>("CommentsGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("CommentsOpen")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("File")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileExtension")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -273,8 +284,9 @@ namespace Creators.Migrations
                     b.Property<bool>("Hidden")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Id_User")
-                        .HasColumnType("int");
+                    b.Property<string>("Id_User")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -282,6 +294,10 @@ namespace Creators.Migrations
 
                     b.Property<TimeOnly>("Time")
                         .HasColumnType("time");
+
+                    b.Property<string>("User")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -302,8 +318,9 @@ namespace Creators.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Id_User")
-                        .HasColumnType("int");
+                    b.Property<string>("Id_User")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -604,7 +621,7 @@ namespace Creators.Migrations
                     b.HasOne("Creators.Creators.Database.CreatorPhoto", "CreatorPhoto")
                         .WithMany("Comments")
                         .HasForeignKey("CommentsGroup")
-                        .HasPrincipalKey("HeartGroup")
+                        .HasPrincipalKey("CommentsGroup")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

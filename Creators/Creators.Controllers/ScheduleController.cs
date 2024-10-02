@@ -9,16 +9,19 @@ namespace Creators.Creators.Controllers
     {
         private readonly IEventsFunctions _eventsFunctions;
         private readonly UserManager<UserModel> _userManager;
-        public ScheduleController(IEventsFunctions eventsFunctions, UserManager<UserModel> userManager) 
+        private readonly IScheduleData _scheduleData;
+        public ScheduleController(IEventsFunctions eventsFunctions, UserManager<UserModel> userManager, IScheduleData scheduleData) 
         { 
             _eventsFunctions = eventsFunctions;
             _userManager = userManager;
+            _scheduleData = scheduleData;
         }
         [HttpGet]
         public async Task<IActionResult> ShowSchedule(string Id_Calendar)
         {
             List<CalendarEvents> events = await _eventsFunctions.ShowSchedule(Id_Calendar);
             UserModel user = await _userManager.GetUserAsync(User);
+            ViewBag.IsCreator = await _scheduleData.IsCreator(Id_Calendar, user);
             ViewBag.User = user;
             return View(events);
         }

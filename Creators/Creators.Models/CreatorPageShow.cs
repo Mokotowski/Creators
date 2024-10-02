@@ -12,8 +12,9 @@
         public bool NotifyImages { get; set; }
         public string Id_Calendar { get; set; }
         public string Id_Donates { get; set; }
+        public string Id_Photos { get; set; }
 
-        public CreatorPageShow(string accountNumber, string description, string profilPicture, string bioLinks, bool notifyEvents, bool notifyImages, string id_Creator, string id_Donates)
+        public CreatorPageShow(string accountNumber, string description, string profilPicture, string bioLinks, bool notifyEvents, bool notifyImages, string id_Creator, string id_Donates, string id_Photos)
         {
             AccountNumber = accountNumber;
             Description = description;
@@ -23,9 +24,10 @@
             NotifyImages = notifyImages;
             Id_Creator = id_Creator;
             Id_Donates = id_Donates;
+            Id_Photos = id_Photos;
         }
 
-        public CreatorPageShow(string profilName, string description, string profilPicture, string bioLinks, string id_Creator, string id_Calendar, string id_Donates)
+        public CreatorPageShow(string profilName, string description, string profilPicture, string bioLinks, string id_Creator, string id_Calendar, string id_Donates, string id_Photos)
         {
             ProfilName = profilName;
             Description = description;
@@ -34,6 +36,7 @@
             Id_Creator = id_Creator;
             Id_Calendar = id_Calendar;
             Id_Donates = id_Donates;
+            Id_Photos = id_Photos;
         }
 
     }

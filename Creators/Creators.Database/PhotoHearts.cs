@@ -7,6 +7,7 @@ namespace Creators.Creators.Database
         [Key]
         public int Id { get; set; }
         public string Id_User { get; set; }
+        public string User {  get; set; }
         public string HeartGroup { get; set; }
 
         public CreatorPhoto CreatorPhoto { get; set; }

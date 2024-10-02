@@ -1,0 +1,21 @@
+﻿@model List<Creators.Creators.Models.HeartsForUser>
+
+@{
+    ViewData["Title"] = "Likes for Photo";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var heart in Model)
+        {
+            <li>@heart.User</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No users have liked this photo yet.</p>
+}

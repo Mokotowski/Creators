@@ -1,11 +1,12 @@
 ﻿using Creators.Creators.Database;
 using Creators.Creators.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Creators.Creators.Services
 {
-    public class ScheduleServices : IEventsFunctions
+    public class ScheduleServices : IEventsFunctions, IScheduleData
     {
         private readonly DatabaseContext _databaseContext;
         private readonly ILogger<ScheduleServices> _logger;
@@ -224,6 +225,36 @@ namespace Creators.Creators.Services
                 return "error";
             }
         }
+
+
+        public async Task<bool> IsCreator(string Id_Calendar, UserModel user)
+        {
+            try
+            {
+                _logger.LogInformation("Checking if user {UserId} is the creator for calendar {Id_Calendar}", user.Id, Id_Calendar);
+
+                CreatorPage page = await _databaseContext.CreatorPage
+                                        .SingleOrDefaultAsync(p => p.Id_Calendar == Id_Calendar);
+
+                if (page == null)
+                {
+                    _logger.LogWarning("No CreatorPage found for calendar {Id_Calendar}", Id_Calendar);
+                    return false;
+                }
+
+                bool isCreator = page.Id_Creator == user.Id;
+                _logger.LogInformation("User {UserId} is {IsCreator} the creator for calendar {Id_Calendar}", user.Id, isCreator ? "indeed" : "not", Id_Calendar);
+
+                return isCreator;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while checking if user {UserId} is the creator for calendar {Id_Calendar}", user.Id, Id_Calendar);
+                return false;
+            }
+        }
+
+
 
     }
 }

@@ -70,6 +70,7 @@ builder.Services.AddScoped<IPageFunctions, CreatorPageServies>();
 builder.Services.AddScoped<IFollow, FollowersServices>();
 builder.Services.AddScoped<IGetFollowers, FollowersServices>();
 
+builder.Services.AddScoped<IScheduleData, ScheduleServices>();
 builder.Services.AddScoped<IEventsFunctions, ScheduleServices>();
 
 builder.Services.AddScoped<IPaypalPay, PaypalServices>();

@@ -186,7 +186,8 @@ namespace Creators.Creators.Services
                     pageData.BioLinks,
                     pageData.Id_Creator,
                     creatorPage.Id_Calendar,
-                    creatorPage.Id_Donates
+                    creatorPage.Id_Donates,
+                    creatorPage.Id_Photos
                 );
 
                 _logger.LogInformation("Successfully retrieved page data for user with ID: {Id_Creator}", Id_Creator);
@@ -234,7 +235,8 @@ namespace Creators.Creators.Services
                     pageData.EmailNotificationsPhoto,
                     pageData.EmailNotificationsEvents,
                     pageData.Id_Creator,
-                    creatorPage.Id_Donates
+                    creatorPage.Id_Donates,
+                    creatorPage.Id_Photos
                 );
 
                 _logger.LogInformation("Successfully retrieved page and creator data for update with ID: {Id_Creator}", Id_Creator);

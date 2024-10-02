@@ -3,9 +3,10 @@
     public class PhotoForUser
     {
         //zwraca struktura zdjęce, ile serc, czy dał serce, komentarze max 5 na zdjęcie, 
+        public int Id { get; set; }
         public string Description { get; set; }
         public bool CommentsOpen { get; set; }
-        public string File { get; set; }
+        public byte[] File { get; set; }
         public string FileExtension { get; set; }
         public DateTime DateTime { get; set; }
         public string Creator { get; set; }

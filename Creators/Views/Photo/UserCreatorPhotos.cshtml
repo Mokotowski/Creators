@@ -1,0 +1,100 @@
+﻿@using Creators.Creators.Models
+@model List<Creators.Creators.Models.PhotoForUser>
+
+@{
+    ViewData["Title"] = "Photos from Creators";
+}
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var photo in Model)
+    {
+        <p>@photo.Creator   @photo.DateTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(photo.File)" alt="Photo" width="150" />
+        <p>@photo.Description</p>
+        <p>Heart count: @photo.CountLike</p>
+
+        @if (photo.GiveLike)
+        {
+            <form asp-action="UnLinkePhoto" method="post">
+                <input type="hidden" name="Id" value="@photo.Id" />
+                <button type="submit" class="btn btn-danger">Unlike</button>
+            </form>
+        }
+        else
+        {
+            <form asp-action="LikePhoto" method="post">
+                <input type="hidden" name="HeartGroup" value="@photo.HeartGroup" />
+                <button type="submit" class="btn btn-danger">Like</button>
+            </form>
+        }
+
+        <a href="@Url.Action("CheckLikesUser", "Photo", new { Id = photo.Id })" class="btn btn-primary">
+            Check likes
+        </a>
+
+
+
+
+
+        @if (photo.CommentsOpen)
+        {
+            <a href="@Url.Action("CheckCommentsUser", "Photo", new { Id = photo.Id })" class="btn btn-primary">
+                Check comments
+            </a>
+
+            CommentsForUser yourcomment = null;
+
+            @if (photo.GiveComment)
+            {
+                yourcomment = photo.CommentsForUsers.Single(p => p.Id_User == ViewBag.Id_User);
+                photo.CommentsForUsers.Remove(yourcomment);
+                <form asp-action="DeleteComment" method="post">
+                    <input type="hidden" name="Id" value="@yourcomment.Id" />
+                    <button type="submit" class="btn btn-danger">Delete comment</button>
+                </form>
+            }
+            else
+            {
+                <form asp-action="AddComment" method="post">
+                    <input type="hidden" name="CommentsGroup" value="@photo.CommentsGroup" />
+                    <div class="form-group">
+                        <label for="Text">Comment</label>
+                        <textarea name="Text" class="form-control" rows="3" placeholder="Enter your comment"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add comment</button>
+                </form>
+            }
+
+            <div class="comments">
+                @if (yourcomment != null)
+                {
+                    <div class="comment">
+                        <p>@yourcomment.User - @($"{yourcomment.Date.ToString("yyyy-MM-dd")} {yourcomment.Time.ToString("HH:mm:ss")}")</p>
+                        <p style="color: cadetblue">@yourcomment.Text</p>
+                    </div>
+                    <br />
+                }
+                @foreach (var comment in photo.CommentsForUsers)
+                {
+                    <div class="comment">
+                        <p>@comment.User - @($"{comment.Date.ToString("yyyy-MM-dd")} {comment.Time.ToString("HH:mm:ss")}")</p>
+                        <p>@comment.Text</p>
+                    </div>
+                    <br />
+                }
+
+            </div>
+
+        }
+
+        <br />
+        <br />
+        <br />
+    }
+}
+else
+{
+    <p>Your creator haven't uploaded any photos yet'.</p>
+}
+

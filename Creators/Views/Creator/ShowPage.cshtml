@@ -38,6 +38,10 @@
         }
     </div>
 
+    <div class="photos">
+        <a href="@Url.Action("UserCreatorPhotos", "Photo", new { Id_Photos = @Model.Id_Photos })" class="btn btn-primary">Check photos</a>
+    </div>
+
     <div class="profile-description">
         <p>@Model.Description</p>
     </div>
@@ -52,3 +56,6 @@
         </ul>
     </div>
 </div>
+
+
+

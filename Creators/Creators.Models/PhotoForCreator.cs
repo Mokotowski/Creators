@@ -10,7 +10,7 @@ namespace Creators.Creators.Models
         public string HeartGroup { get; set; }
         public string Description { get; set; }
         public bool CommentsOpen { get; set; }
-        public string File { get; set; }
+        public byte[] File { get; set; }
         public string FileExtension { get; set; }
         public DateTime DateTime { get; set; }
 

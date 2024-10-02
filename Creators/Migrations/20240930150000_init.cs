@@ -289,6 +289,9 @@ namespace Creators.Migrations
                     CommentsGroup = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HeartGroup = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CommentsOpen = table.Column<bool>(type: "bit", nullable: false),
+                    File = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    FileExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -333,7 +336,7 @@ namespace Creators.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Id_User = table.Column<int>(type: "int", nullable: false),
+                    Id_User = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CommentsGroup = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
                     Time = table.Column<TimeOnly>(type: "time", nullable: false),
@@ -357,7 +360,7 @@ namespace Creators.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Id_User = table.Column<int>(type: "int", nullable: false),
+                    Id_User = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HeartGroup = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>

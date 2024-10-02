@@ -4,6 +4,7 @@ using Creators.Creators.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Creators.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240930150000_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +122,7 @@ namespace Creators.Migrations
 
                     b.Property<string>("CommentsGroup")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("CommentsOpen")
                         .HasColumnType("bit");
@@ -292,10 +295,6 @@ namespace Creators.Migrations
                     b.Property<TimeOnly>("Time")
                         .HasColumnType("time");
 
-                    b.Property<string>("User")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CommentsGroup");
@@ -316,10 +315,6 @@ namespace Creators.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Id_User")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("User")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -622,7 +617,7 @@ namespace Creators.Migrations
                     b.HasOne("Creators.Creators.Database.CreatorPhoto", "CreatorPhoto")
                         .WithMany("Comments")
                         .HasForeignKey("CommentsGroup")
-                        .HasPrincipalKey("CommentsGroup")
+                        .HasPrincipalKey("HeartGroup")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

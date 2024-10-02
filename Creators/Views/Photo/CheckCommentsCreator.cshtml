@@ -1,0 +1,40 @@
+﻿@model List<Creators.Creators.Database.PhotoComments>
+
+@{
+    ViewData["Title"] = "Comments for Creator's Photos";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Comment</th>
+                <th>Group</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Hidden</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var comment in Model)
+            {
+                <tr>
+                    <td>@comment.Id_User</td>
+                    <td>@comment.Text</td>
+                    <td>@comment.CommentsGroup</td>
+                    <td>@comment.Date.ToString("yyyy-MM-dd")</td>
+                    <td>@comment.Time.ToString("HH:mm:ss")</td>
+                    <td>@(comment.Hidden ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No comments available for this creator's photos.</p>
+}

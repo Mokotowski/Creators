@@ -73,7 +73,7 @@ namespace Creators.Creators.Database
                 .HasOne(d => d.CreatorPhoto)
                 .WithMany(c => c.Comments)
                 .HasForeignKey(d => d.CommentsGroup)
-                .HasPrincipalKey(c => c.HeartGroup);
+                .HasPrincipalKey(c => c.CommentsGroup);
 
             modelBuilder.Entity<CreatorPage>()
                .HasOne(c => c.CreatorBalance)

@@ -11,7 +11,8 @@ namespace Creators.Creators.Database
         public string HeartGroup { get; set; }
         public string Description { get; set; }
         public bool CommentsOpen { get; set; }
-        public string File {  get; set; }
+        [Required]
+        public byte[] File { get; set; }
         public string FileExtension { get; set; }
         public DateTime DateTime { get; set; }
 

@@ -2,7 +2,6 @@
 using Creators.Creators.Models;
 using Creators.Creators.Services.Interface;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 
 namespace Creators.Creators.Services
 {
@@ -10,34 +9,55 @@ namespace Creators.Creators.Services
     {
         private readonly ILogger<PhotoDataServices> _logger;
         private readonly DatabaseContext _databaseContext;
-        public PhotoDataServices(ILogger<PhotoDataServices> logger, DatabaseContext databaseContext) 
-        { 
+
+        public PhotoDataServices(ILogger<PhotoDataServices> logger, DatabaseContext databaseContext)
+        {
             _logger = logger;
             _databaseContext = databaseContext;
         }
 
-
         public async Task<List<PhotoHearts>> GetLikesCreator(int Id, UserModel user)
         {
-            CreatorPhoto photo = _databaseContext.CreatorPhoto.Find(Id);
-            CreatorPage creatorPage = _databaseContext.CreatorPage.Find(user.Id);
-            
-            if(creatorPage.Id_Photos == photo.Id_Photos)
-            {
-                List<PhotoHearts> hearts = _databaseContext.PhotoHearts.Where(p => p.HeartGroup == photo.HeartGroup).ToList();
-                return hearts;
-            }
+            _logger.LogInformation("Starting GetLikesCreator for user {UserId} and photo {PhotoId}", user.Id, Id);
 
-            return new List<PhotoHearts>(); 
-        }
-        public async Task<List<PhotoComments>> GetCommentsCreator(int Id, UserModel user)
-        {
-            CreatorPhoto photo = _databaseContext.CreatorPhoto.Find(Id);
-            CreatorPage creatorPage = _databaseContext.CreatorPage.Find(user.Id);
+            var photo = await _databaseContext.CreatorPhoto.FindAsync(Id);
+            var creatorPage = await _databaseContext.CreatorPage.FindAsync(user.Id);
+
+            if (creatorPage == null || photo == null)
+            {
+                _logger.LogWarning("CreatorPage or photo not found for user {UserId} and photo {PhotoId}", user.Id, Id);
+                return new List<PhotoHearts>();
+            }
 
             if (creatorPage.Id_Photos == photo.Id_Photos)
             {
-                List<PhotoComments> comments = _databaseContext.PhotoComments.Where(p => p.CommentsGroup == photo.CommentsGroup).ToList();
+                var hearts = await _databaseContext.PhotoHearts
+                    .Where(p => p.HeartGroup == photo.HeartGroup)
+                    .ToListAsync();
+                return hearts;
+            }
+
+            return new List<PhotoHearts>();
+        }
+
+        public async Task<List<PhotoComments>> GetCommentsCreator(int Id, UserModel user)
+        {
+            _logger.LogInformation("Starting GetCommentsCreator for user {UserId} and photo {PhotoId}", user.Id, Id);
+
+            var photo = await _databaseContext.CreatorPhoto.FindAsync(Id);
+            var creatorPage = await _databaseContext.CreatorPage.FindAsync(user.Id);
+
+            if (creatorPage == null || photo == null)
+            {
+                _logger.LogWarning("CreatorPage or photo not found for user {UserId} and photo {PhotoId}", user.Id, Id);
+                return new List<PhotoComments>();
+            }
+
+            if (creatorPage.Id_Photos == photo.Id_Photos)
+            {
+                var comments = await _databaseContext.PhotoComments
+                    .Where(p => p.CommentsGroup == photo.CommentsGroup)
+                    .ToListAsync();
                 return comments;
             }
 
@@ -46,68 +66,109 @@ namespace Creators.Creators.Services
 
         public async Task<List<HeartsForUser>> GetLikesUser(int Id)
         {
-            CreatorPhoto photo = _databaseContext.CreatorPhoto.Find(Id);
-            List <PhotoHearts> hearts = _databaseContext.PhotoHearts.Where(p => p.HeartGroup == photo.HeartGroup).ToList();
-            List<HeartsForUser> heartsForUsers = new List<HeartsForUser>();
+            _logger.LogInformation("Starting GetLikesUser for photo {PhotoId}", Id);
 
-            for (int i = 0; i < hearts.Count; i++)
+            var photo = await _databaseContext.CreatorPhoto.FindAsync(Id);
+            if (photo == null)
             {
-                HeartsForUser heart = new HeartsForUser()
-                {
-                    User = _databaseContext.Users.Find(hearts[i].Id).UserName
-                };
-                heartsForUsers.Add(heart);
+                _logger.LogWarning("Photo with Id {PhotoId} not found", Id);
+                return new List<HeartsForUser>();
             }
 
-            return heartsForUsers;  
+            var hearts = await _databaseContext.PhotoHearts
+                .Where(p => p.HeartGroup == photo.HeartGroup)
+                .ToListAsync();
+
+            var heartsForUsers = new List<HeartsForUser>();
+
+            foreach (var heart in hearts)
+            {
+                var user = await _databaseContext.Users.FindAsync(heart.Id_User);
+                if (user != null)
+                {
+                    heartsForUsers.Add(new HeartsForUser { User = user.UserName });
+                }
+            }
+
+            return heartsForUsers;
         }
+
         public async Task<List<CommentsForUser>> GetCommentsUser(int Id, UserModel user)
         {
-            CreatorPhoto photo = _databaseContext.CreatorPhoto.Find(Id);
-            List<PhotoComments> comments = _databaseContext.PhotoComments.Where(p => p.CommentsGroup == photo.CommentsGroup).ToList();
-            List<CommentsForUser> commentsForUsers = new List<CommentsForUser>();
+            _logger.LogInformation("Starting GetCommentsUser for user {UserId} and photo {PhotoId}", user.Id, Id);
 
-            for (int i = 0; i < comments.Count; i++)
+            var photo = await _databaseContext.CreatorPhoto.FindAsync(Id);
+            if (photo == null)
             {
-                if (!comments[i].Hidden || comments[i].Id_User == user.Id)
+                _logger.LogWarning("Photo with Id {PhotoId} not found", Id);
+                return new List<CommentsForUser>();
+            }
+
+            var comments = await _databaseContext.PhotoComments
+                .Where(p => p.CommentsGroup == photo.CommentsGroup)
+                .ToListAsync();
+
+            var commentsForUsers = new List<CommentsForUser>();
+
+            foreach (var comment in comments)
+            {
+                if (!comment.Hidden || comment.Id_User == user.Id)
                 {
-                    CommentsForUser comment = new CommentsForUser()
+                    var commentUser = await _databaseContext.Users.FindAsync(comment.Id_User);
+                    if (commentUser != null)
                     {
-                        Date = comments[i].Date,
-                        Time = comments[i].Time,
-                        Text = comments[i].Text,
-                        User = _databaseContext.Users.Find(comments[i].Id).UserName
-                    };
-                    commentsForUsers.Add(comment);
+                        commentsForUsers.Add(new CommentsForUser
+                        {
+                            Id = comment.Id,
+                            Id_User = comment.Id_User,
+                            Date = comment.Date,
+                            Time = comment.Time,
+                            Text = comment.Text,
+                            User = commentUser.UserName
+                        });
+                    }
                 }
             }
 
             return commentsForUsers;
         }
 
-
         public async Task<List<PhotoForCreator>> GetPhotosCreator(UserModel user)
         {
-            CreatorPage creatorPage = _databaseContext.CreatorPage.Find(user.Id);
-            List<CreatorPhoto> creatorPhotos = _databaseContext.CreatorPhoto.Where(p => p.Id_Photos == creatorPage.Id_Photos).ToList();
-            List<PhotoForCreator> photos = new List<PhotoForCreator>();
+            _logger.LogInformation("Starting GetPhotosCreator for user {UserId}", user.Id);
 
-            for (int i = 0; i < creatorPhotos.Count; i++)
+            var creatorPage = await _databaseContext.CreatorPage.FindAsync(user.Id);
+            if (creatorPage == null)
             {
-                PhotoForCreator photoForCreator = new PhotoForCreator()
-                {
-                    Id = creatorPhotos[i].Id,
-                    Id_Photos = creatorPhotos[i].Id_Photos,
-                    CommentsGroup = creatorPhotos[i].CommentsGroup,
-                    HeartGroup = creatorPhotos[i].HeartGroup,
-                    Description = creatorPhotos[i].Description,
-                    CommentsOpen = creatorPhotos[i].CommentsOpen,
-                    File = creatorPhotos[i].File,
-                    FileExtension = creatorPhotos[i].FileExtension,
-                    DateTime = creatorPhotos[i].DateTime,
+                _logger.LogWarning("CreatorPage not found for user {UserId}", user.Id);
+                return new List<PhotoForCreator>();
+            }
 
-                    comments = _databaseContext.PhotoComments.Where(p => p.CommentsGroup == creatorPhotos[i].CommentsGroup).ToList(),
-                    Hearts = _databaseContext.PhotoHearts.Where(p => p.HeartGroup == creatorPhotos[i].HeartGroup).ToList(),
+            var creatorPhotos = await _databaseContext.CreatorPhoto
+                .Where(p => p.Id_Photos == creatorPage.Id_Photos)
+                .ToListAsync();
+
+            var photos = new List<PhotoForCreator>();
+
+            foreach (var creatorPhoto in creatorPhotos)
+            {
+                var photoForCreator = new PhotoForCreator
+                {
+                    Id = creatorPhoto.Id,
+                    Id_Photos = creatorPhoto.Id_Photos,
+                    CommentsGroup = creatorPhoto.CommentsGroup,
+                    HeartGroup = creatorPhoto.HeartGroup,
+                    Description = creatorPhoto.Description,
+                    CommentsOpen = creatorPhoto.CommentsOpen,
+                    File = creatorPhoto.File,
+                    FileExtension = creatorPhoto.FileExtension,
+                    DateTime = creatorPhoto.DateTime,
+                    comments = await _databaseContext.PhotoComments
+                        .Where(p => p.CommentsGroup == creatorPhoto.CommentsGroup)
+                        .ToListAsync(),
+                    Hearts = await _databaseContext.PhotoHearts
+                        .Where(p => p.HeartGroup == creatorPhoto.HeartGroup)
+                        .ToListAsync()
                 };
 
                 photos.Add(photoForCreator);
@@ -116,57 +177,52 @@ namespace Creators.Creators.Services
             return photos;
         }
 
-
         public async Task<List<PhotoForUser>> GetCreatorsPhotosUser(UserModel user)
         {
-            List<string> Id_Photos = await _databaseContext.Followers
+            _logger.LogInformation("Starting GetCreatorsPhotosUser for user {UserId}", user.Id);
+
+            var Id_Photos = await _databaseContext.Followers
                 .Where(f => f.Id_User == user.Id)
-                .Join(
-                    _databaseContext.CreatorPage,
+                .Join(_databaseContext.CreatorPage,
                     follower => follower.Id_Creator,
                     creatorPage => creatorPage.Id_Creator,
-                    (follower, creatorPage) => new { creatorPage.Id_Photos } 
-                )
-                .Join(
-                    _databaseContext.CreatorPhoto,
-                    creatorPage => creatorPage.Id_Photos, 
+                    (follower, creatorPage) => new { creatorPage.Id_Photos })
+                .Join(_databaseContext.CreatorPhoto,
+                    creatorPage => creatorPage.Id_Photos,
                     creatorPhoto => creatorPhoto.Id_Photos,
-                    (creatorPage, creatorPhoto) => creatorPhoto.Id_Photos 
-                )
+                    (creatorPage, creatorPhoto) => creatorPhoto.Id_Photos)
                 .ToListAsync();
 
             var creatorPhotos = await _databaseContext.CreatorPhoto
-                .Where(photo => Id_Photos.Contains(photo.Id_Photos)) 
+                .Where(photo => Id_Photos.Contains(photo.Id_Photos))
                 .ToListAsync();
 
-            List<PhotoForUser> photos = new List<PhotoForUser>();
+            var photos = new List<PhotoForUser>();
 
-            for (int i = 0; i < creatorPhotos.Count; i++)
+            foreach (var creatorPhoto in creatorPhotos)
             {
-                CreatorPage creatorPage = _databaseContext.CreatorPage.Single(p => p.Id_Photos == creatorPhotos[i].Id_Photos);
-                UserModel creator = _databaseContext.Users.Find(creatorPage.Id_Creator);
+                var creatorPage = await _databaseContext.CreatorPage
+                    .SingleAsync(p => p.Id_Photos == creatorPhoto.Id_Photos);
+                var creator = await _databaseContext.Users.FindAsync(creatorPage.Id_Creator);
 
-
-                bool GiveLike = _databaseContext.PhotoHearts.Any(p => p.HeartGroup == p.HeartGroup && p.Id_User == user.Id);
-                bool GiveComment = _databaseContext.PhotoComments.Any(p => p.CommentsGroup == p.CommentsGroup && p.Id_User == user.Id);
-                int CountLike = _databaseContext.PhotoHearts.Count(p => p.HeartGroup == creatorPhotos[i].HeartGroup);
-
-                PhotoForUser photoForUser = new PhotoForUser()
+                var photoForUser = new PhotoForUser
                 {
-                    Description = creatorPhotos[i].Description,
-                    CommentsOpen = creatorPhotos[i].CommentsOpen,
-                    File = creatorPhotos[i].File,
-                    FileExtension = creatorPhotos[i].FileExtension,
-                    DateTime = creatorPhotos[i].DateTime,
-                    Creator = creator.UserName,
-                    GiveLike = GiveLike,
-                    GiveComment = GiveComment,
-                    CountLike = CountLike,
-
-                    CommentsGroup = creatorPhotos[i].CommentsGroup,
-                    HeartGroup = creatorPhotos[i].HeartGroup,
-
-                    CommentsForUsers = await GetCommentsUser(creatorPhotos[i].Id, user)
+                    Id = creatorPhoto.Id,
+                    Description = creatorPhoto.Description,
+                    CommentsOpen = creatorPhoto.CommentsOpen,
+                    File = creatorPhoto.File,
+                    FileExtension = creatorPhoto.FileExtension,
+                    DateTime = creatorPhoto.DateTime,
+                    Creator = creator?.UserName,
+                    GiveLike = await _databaseContext.PhotoHearts
+                        .AnyAsync(p => p.HeartGroup == creatorPhoto.HeartGroup && p.Id_User == user.Id),
+                    GiveComment = await _databaseContext.PhotoComments
+                        .AnyAsync(p => p.CommentsGroup == creatorPhoto.CommentsGroup && p.Id_User == user.Id),
+                    CountLike = await _databaseContext.PhotoHearts
+                        .CountAsync(p => p.HeartGroup == creatorPhoto.HeartGroup),
+                    CommentsGroup = creatorPhoto.CommentsGroup,
+                    HeartGroup = creatorPhoto.HeartGroup,
+                    CommentsForUsers = await GetCommentsUser(creatorPhoto.Id, user)
                 };
 
                 photos.Add(photoForUser);
@@ -174,37 +230,41 @@ namespace Creators.Creators.Services
 
             return photos;
         }
-
 
         public async Task<List<PhotoForUser>> GetCreatorPhotosUser(string Id_Photos, UserModel user)
         {
-            List<CreatorPhoto> creatorPhotos = _databaseContext.CreatorPhoto.Where(p => p.Id_Photos == Id_Photos).ToList();
-            CreatorPage creatorPage = _databaseContext.CreatorPage.Single(p => p.Id_Photos == Id_Photos);
-            UserModel creator = _databaseContext.Users.Find(creatorPage.Id_Creator);
-            List<PhotoForUser> photos = new List<PhotoForUser>();
+            _logger.LogInformation("Starting GetCreatorPhotosUser for Id_Photos {Id_Photos} and user {UserId}", Id_Photos, user.Id);
 
-            for(int i = 0; i < creatorPhotos.Count; i++)
+            var creatorPhotos = await _databaseContext.CreatorPhoto
+                .Where(p => p.Id_Photos == Id_Photos)
+                .ToListAsync();
+
+            var creatorPage = await _databaseContext.CreatorPage
+                .SingleAsync(p => p.Id_Photos == Id_Photos);
+
+            var creator = await _databaseContext.Users.FindAsync(creatorPage.Id_Creator);
+            var photos = new List<PhotoForUser>();
+
+            foreach (var creatorPhoto in creatorPhotos)
             {
-                bool GiveLike = _databaseContext.PhotoHearts.Any(p => p.HeartGroup == p.HeartGroup && p.Id_User == user.Id);
-                bool GiveComment = _databaseContext.PhotoComments.Any(p => p.CommentsGroup == p.CommentsGroup && p.Id_User == user.Id);
-                int CountLike = _databaseContext.PhotoHearts.Count(p => p.HeartGroup == creatorPhotos[i].HeartGroup);
-
-                PhotoForUser photoForUser = new PhotoForUser()
+                var photoForUser = new PhotoForUser
                 {
-                    Description = creatorPhotos[i].Description,
-                    CommentsOpen = creatorPhotos[i].CommentsOpen,
-                    File = creatorPhotos[i].File,
-                    FileExtension = creatorPhotos[i].FileExtension,
-                    DateTime = creatorPhotos[i].DateTime,
-                    Creator = creator.UserName,
-                    GiveLike = GiveLike,
-                    GiveComment = GiveComment,
-                    CountLike = CountLike,
-
-                    CommentsGroup = creatorPhotos[i].CommentsGroup,
-                    HeartGroup = creatorPhotos[i].HeartGroup,
-
-                    CommentsForUsers = await GetCommentsUser(creatorPhotos[i].Id, user)
+                    Id = creatorPhoto.Id,
+                    Description = creatorPhoto.Description,
+                    CommentsOpen = creatorPhoto.CommentsOpen,
+                    File = creatorPhoto.File,
+                    FileExtension = creatorPhoto.FileExtension,
+                    DateTime = creatorPhoto.DateTime,
+                    Creator = creator?.UserName,
+                    GiveLike = await _databaseContext.PhotoHearts
+                        .AnyAsync(p => p.HeartGroup == creatorPhoto.HeartGroup && p.Id_User == user.Id),
+                    GiveComment = await _databaseContext.PhotoComments
+                        .AnyAsync(p => p.CommentsGroup == creatorPhoto.CommentsGroup && p.Id_User == user.Id),
+                    CountLike = await _databaseContext.PhotoHearts
+                        .CountAsync(p => p.HeartGroup == creatorPhoto.HeartGroup),
+                    CommentsGroup = creatorPhoto.CommentsGroup,
+                    HeartGroup = creatorPhoto.HeartGroup,
+                    CommentsForUsers = await GetCommentsUser(creatorPhoto.Id, user)
                 };
 
                 photos.Add(photoForUser);
@@ -212,5 +272,38 @@ namespace Creators.Creators.Services
 
             return photos;
         }
+
+
+        public async Task<string> GetId_Photos(UserModel user)
+        {
+            try
+            {
+                if (user == null || string.IsNullOrEmpty(user.Id))
+                {
+                    _logger.LogWarning("GetId_Photos: Invalid user provided.");
+                    return null;
+                }
+
+                _logger.LogInformation("GetId_Photos: Retrieving Id_Photos for user {UserId}", user.Id);
+
+                CreatorPage page = await _databaseContext.CreatorPage.FindAsync(user.Id);
+
+                if (page == null)
+                {
+                    _logger.LogWarning("GetId_Photos: CreatorPage not found for user {UserId}", user.Id);
+                    return null;
+                }
+
+                _logger.LogInformation("GetId_Photos: Successfully retrieved Id_Photos for user {UserId}", user.Id);
+                return page.Id_Photos;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetId_Photos: Error retrieving Id_Photos for user {UserId}", user?.Id);
+                return null;
+            }
+        }
+
+
     }
 }

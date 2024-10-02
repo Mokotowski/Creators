@@ -25,22 +25,22 @@
             @foreach (var events in Model)
             {
                 if (events.DateOnly >= pastLimit)
-            {
-            <tr>
-                <td>@events.DateOnly.ToString("yyyy-MM-dd")</td>
-                <td>@events.Start</td>
-                <td>@events.End</td>
-                <td>@events.Description</td>
-            </tr>
-        }
-    }
+                {
+                    <tr>
+                        <td>@events.DateOnly.ToString("yyyy-MM-dd")</td>
+                        <td>@events.Start</td>
+                        <td>@events.End</td>
+                        <td>@events.Description</td>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
 
-    @if (ViewBag.User.IsCreator)
+    @if (ViewBag.IsCreator != null && ViewBag.IsCreator && ViewBag.User != null)
     {
-    <div id="manage-link-container">
-        <a id="manage-events-link" href="@Url.Action("ScheduleManage", "Schedule", new { Id_Calendar = ViewBag.User.Id })">Manage Events</a>
-    </div>
+        <div id="manage-link-container">
+            <a id="manage-events-link" href="@Url.Action("ScheduleManage", "Schedule", new { Id_Calendar = ViewBag.User.Id })">Manage Events</a>
+        </div>
     }
 </div>
