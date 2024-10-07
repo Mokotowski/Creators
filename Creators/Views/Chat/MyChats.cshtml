@@ -1,0 +1,26 @@
+﻿@model List<Creators.Creators.Database.Chats>
+
+@foreach(var chat in Model)
+{
+    if(chat.User1 == ViewBag.UserName)
+    {
+        <p>@chat.User2</p>
+
+        <form method="get" asp-action="Chat" asp-controller="Chat">
+            <input type="hidden" name="Id" value="@chat.Id" />
+
+            <button type="submit">Chat</button>
+        </form>
+    }
+    else
+    {
+        <p>@chat.User1</p>
+
+        <form method="get" asp-action="Chat" asp-controller="Chat">
+            <input type="hidden" name="Id" value="@chat.Id" />
+
+            <button type="submit">Chat</button>
+        </form>
+    }
+
+}

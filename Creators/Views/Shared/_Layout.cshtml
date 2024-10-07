@@ -34,6 +34,18 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
+                                <form method="get" asp-controller="Chat" asp-action="SearchUser">
+                                    <button type="submit" class="nav-link btn btn-link">Search User</button>
+                                </form>
+                            </li>
+
+                            <li class="nav-item">
+                                <form method="get" asp-controller="Chat" asp-action="MyChats">
+                                    <button type="submit" class="nav-link btn btn-link">My Chats</button>
+                                </form>
+                            </li>
+
+                            <li class="nav-item">
                                 <form method="get" asp-controller="Creator" asp-action="SearchCreator">
                                     <button type="submit" class="nav-link btn btn-link">Search Creator</button>
                                 </form>

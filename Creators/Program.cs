@@ -84,6 +84,12 @@ builder.Services.AddScoped<IComments, PhotoActionsServices>();
 builder.Services.AddScoped<IPhotosManage, PhotosManagerServices>();
 builder.Services.AddScoped<IPhotoDataGet, PhotoDataServices>();
 
+builder.Services.AddScoped<IBlock, BlockUserServices>();
+
+builder.Services.AddScoped<IChatsActions, ChatServices>();
+
+builder.Services.AddScoped<IUserData, UserDataServices>();
+
 
 
 builder.Services.AddRazorPages();

@@ -21,6 +21,9 @@ namespace Creators.Creators.Database
         public DbSet<PhotoHearts> PhotoHearts { get; set; }
         public DbSet<Followers> Followers { get; set; }
         public DbSet<CreatorBalance> CreatorBalance { get; set; }
+        public DbSet<Messages> Messages { get; set; }
+        public DbSet<Chats> Chats { get; set; }
+        public DbSet<Blocklist> Blocklist { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -80,6 +83,12 @@ namespace Creators.Creators.Database
                .WithOne(d => d.CreatorPage)
                .HasForeignKey<CreatorBalance>(d => d.Id_Donates);
 
+
+            modelBuilder.Entity<Messages>()
+                .HasOne(d => d.Chat)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(d => d.Chat_Id)
+                .HasPrincipalKey(c => c.Id);
 
 
             base.OnModelCreating(modelBuilder);

@@ -1,0 +1,10 @@
+﻿<div>
+    <form method="post" asp-action="SearchUserResult" asp-controller="Chat">
+
+        <label for="userphrase">Find user:</label>
+        <input type="text" name="userphrase" minlength="5" maxlength="20" pattern="[A-Za-z]+" required placeholder="Find user" />
+
+
+        <button type="submit">Find User</button>
+    </form>
+</div>

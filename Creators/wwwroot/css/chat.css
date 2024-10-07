@@ -1,0 +1,37 @@
+﻿.chat-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.message-container {
+    margin-bottom: 10px;
+}
+
+.message-sent {
+    text-align: right;
+    background-color: #d1e7dd;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 50%;
+    margin-left: auto;
+}
+
+.message-received {
+    text-align: left;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 50%;
+    margin-right: auto;
+}
+
+.message-text {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.message-actions {
+    font-size: 12px;
+    text-align: right;
+}
