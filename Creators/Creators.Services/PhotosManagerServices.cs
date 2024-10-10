@@ -1,6 +1,7 @@
 ﻿using Creators.Creators.Database;
 using Creators.Creators.Services.Interface;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Creators.Creators.Services
 {
@@ -8,54 +9,100 @@ namespace Creators.Creators.Services
     {
         private readonly ILogger<PhotosManagerServices> _logger;
         private readonly DatabaseContext _databaseContext;
+        private readonly INotificationEmail _notificationEmail;
+        private readonly IGetFollowers _getFollowers;
 
-        public PhotosManagerServices(ILogger<PhotosManagerServices> logger, DatabaseContext databaseContext)
+        public PhotosManagerServices(ILogger<PhotosManagerServices> logger, DatabaseContext databaseContext, INotificationEmail notificationEmail, IGetFollowers getFollowers)
         {
             _logger = logger;
             _databaseContext = databaseContext;
+            _notificationEmail = notificationEmail;
+            _getFollowers = getFollowers;
         }
 
         public async Task AddPhoto(string Description, bool CommentsOpen, byte[] File, string FileExtension, UserModel user)
         {
             _logger.LogInformation("Starting AddPhoto for user {UserId}", user.Id);
 
-            var creatorPage = await _databaseContext.CreatorPage
-                .FirstOrDefaultAsync(p => p.Id_Creator == user.Id);
-            if (creatorPage == null)
+            if (string.IsNullOrEmpty(Description) || File == null || string.IsNullOrEmpty(FileExtension))
             {
-                _logger.LogWarning("CreatorPage not found for user {UserId}", user.Id);
+                _logger.LogWarning("Invalid input data for AddPhoto by user {UserId}", user.Id);
                 return;
             }
 
-            string CommentsGroup;
-            string HeartGroup;
-
-            do
+            try
             {
-                CommentsGroup = Guid.NewGuid().ToString();
-                HeartGroup = Guid.NewGuid().ToString();
+                var creatorPage = await _databaseContext.CreatorPage
+                    .FirstOrDefaultAsync(p => p.Id_Creator == user.Id);
+
+                if (creatorPage == null)
+                {
+                    _logger.LogWarning("CreatorPage not found for user {UserId}", user.Id);
+                    return;
+                }
+
+                string CommentsGroup;
+                string HeartGroup;
+
+                do
+                {
+                    CommentsGroup = Guid.NewGuid().ToString();
+                    HeartGroup = Guid.NewGuid().ToString();
+                }
+                while (await _databaseContext.CreatorPhoto
+                           .AnyAsync(p => p.CommentsGroup == CommentsGroup || p.HeartGroup == HeartGroup));
+
+                DateTime dateTime = DateTime.Now;
+
+                CreatorPhoto photo = new CreatorPhoto()
+                {
+                    Id_Photos = creatorPage.Id_Photos,
+                    CommentsGroup = CommentsGroup,
+                    HeartGroup = HeartGroup,
+                    Description = Description,
+                    CommentsOpen = CommentsOpen,
+                    File = File,
+                    FileExtension = FileExtension,
+                    DateTime = dateTime,
+                    CreatorPage = creatorPage,
+                };
+
+                PageData pageData = await _databaseContext.PageData.FindAsync(user.Id);
+
+                if (pageData != null && pageData.EmailNotificationsPhoto)
+                {
+                    List<Followers> followers = await _getFollowers.GetCreatorFollowers(user.Id);
+                    foreach (var follower in followers)
+                    {
+                        var userFollower = await _databaseContext.Users
+                            .FirstOrDefaultAsync(p => p.Id == follower.Id_User);
+
+                        if (userFollower != null)
+                        {
+                            await _notificationEmail.SendNotificationAddPhotoEmail(
+                                userFollower.Email,
+                                creatorPage.Id_Photos,
+                                DateOnly.FromDateTime(dateTime),
+                                Description,
+                                user.UserName
+                            );
+                            _logger.LogInformation("Notification sent to follower {FollowerId}", userFollower.Id);
+                        }
+                    }
+                }
+
+                await _databaseContext.CreatorPhoto.AddAsync(photo);
+                await _databaseContext.SaveChangesAsync();
+
+                _logger.LogInformation("Photo added successfully for user {UserId}", user.Id);
             }
-            while (await _databaseContext.CreatorPhoto
-                       .AnyAsync(p => p.CommentsGroup == CommentsGroup || p.HeartGroup == HeartGroup));
-
-            CreatorPhoto photo = new CreatorPhoto()
+            catch (Exception ex)
             {
-                Id_Photos = creatorPage.Id_Photos,
-                CommentsGroup = CommentsGroup,
-                HeartGroup = HeartGroup,
-                Description = Description,
-                CommentsOpen = CommentsOpen,
-                File = File,
-                FileExtension = FileExtension,
-                DateTime = DateTime.Now,
-                CreatorPage = creatorPage,
-            };
-
-            _databaseContext.CreatorPhoto.Add(photo);
-            await _databaseContext.SaveChangesAsync();
-
-            _logger.LogInformation("Photo added successfully for user {UserId}", user.Id);
+                _logger.LogError(ex, "An error occurred while adding a photo for user {UserId}", user.Id);
+                throw;
+            }
         }
+
 
         public async Task DeletePhoto(int Id, UserModel user)
         {

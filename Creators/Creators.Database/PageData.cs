@@ -8,7 +8,8 @@ namespace Creators.Creators.Database
         public string Id_Creator { get; set; }
         public string Description { get; set; }
         public string ProfilName { get; set; }
-        public string ProfilPicture { get; set; }
+        public byte[] ProfilPicture { get; set; }
+        public string ProfilPictureExtension { get; set; }
         public bool EmailNotificationsPhoto { get; set; }
         public bool EmailNotificationsEvents { get; set; }
 

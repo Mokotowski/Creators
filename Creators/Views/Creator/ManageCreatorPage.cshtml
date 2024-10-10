@@ -16,6 +16,10 @@
             Edit Your Page
         </a>
 
+        <a href="@Url.Action("UpdatePageAccountNumber", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-warning">
+            Edit Your Account Number
+        </a>
+
         <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = Model.Id_Creator })" class="btn btn-info">
             View Your Followers
         </a>

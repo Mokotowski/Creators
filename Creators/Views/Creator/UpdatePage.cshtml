@@ -6,22 +6,20 @@
 
 
 <div class="form-container">
-    <form id="updatePageForm" method="post" asp-action="UpdatePageRequest" asp-controller="Creator">
-
-        <div class="form-group">
-            <label for="accountNumber">Account Number:</label>
-            <input type="text" id="accountNumber" name="AccountNumber" value="@Model.AccountNumber" maxlength="40" required/>
-        </div>
+    <form id="updatePageForm" method="post" enctype="multipart/form-data" asp-action="UpdatePageRequest" asp-controller="Creator">
 
         <div class="form-group">
             <label for="description">Description:</label>
             <textarea id="description" name="Description" rows="4" maxlength="500" required placeholder="Describe your profile">@Model.Description</textarea>
         </div>
 
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(@Model.ProfilPicture)" alt="Photo" width="150" />
+
         <div class="form-group">
-            <label for="profileImage">Profile Image URL:</label>
-            <input type="url" id="profileImage" name="ProfileImage" value="@Model.ProfilPicture" required placeholder="Enter Profile Image URL" />
+            <label for="ProfileImage">Wybierz plik</label>
+            <input type="file" id="ProfileImage" name="ProfileImage" class="form-control" />
         </div>
+
 
         <div class="form-group">
             <label>Receive Notifications:</label>

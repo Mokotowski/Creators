@@ -37,27 +37,33 @@ namespace Creators.Creators.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> BecomeCreatorRegisterPlatform(string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks)
+        public async Task<IActionResult> BecomeCreatorRegisterPlatform(string AccountNumber, string Description, IFormFile ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks)
         {
             var user = await _userManager.GetUserAsync(User);
-            string result = await _pageFunctions.CreatePage(user, AccountNumber, Description, ProfileImage, NotifyImages, NotifyEvents, BioLinks);
-
-            IActionResult actionResult;
-
-            switch (result)
+            using (var stream = new MemoryStream())
             {
-                case "Exist":
-                    actionResult = RedirectToAction("PageExist", new { Id_Creator = user.Id });
-                    break;
-                case "Error":
-                    actionResult = RedirectToAction("ErrorCreatePage");
-                    break;
-                default:
-                    actionResult = RedirectToAction("Thanks", "Creator", new { Id_Creator = user.Id });
-                    break;
-            } 
+                await ProfileImage.CopyToAsync(stream);
+                byte[] fileBytes = stream.ToArray();
 
-            return actionResult;
+                string result = await _pageFunctions.CreatePage(user, AccountNumber, Description, fileBytes, Path.GetExtension(ProfileImage.FileName).ToLower(), NotifyImages, NotifyEvents, BioLinks);
+
+                IActionResult actionResult;
+
+                switch (result)
+                {
+                    case "Exist":
+                        actionResult = RedirectToAction("PageExist", new { Id_Creator = user.Id });
+                        break;
+                    case "Error":
+                        actionResult = RedirectToAction("ErrorCreatePage");
+                        break;
+                    default:
+                        actionResult = RedirectToAction("Thanks", "Creator", new { Id_Creator = user.Id });
+                        break;
+                }
+
+                return actionResult;
+            }
         }
 
         [HttpGet]
@@ -82,10 +88,6 @@ namespace Creators.Creators.Controllers
         }
 
 
-
-
-
-
         [HttpGet]
         public async Task<IActionResult> ShowPage(string Id_Creator)
         {
@@ -93,6 +95,9 @@ namespace Creators.Creators.Controllers
             ViewBag.IsFollowing = await _follow.IsFollowing(Id_Creator, await _userManager.GetUserAsync(User));
             return View(pageShow);
         }
+
+
+
 
 
         [HttpGet]
@@ -103,19 +108,50 @@ namespace Creators.Creators.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdatePageRequest(string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks)
+        public async Task<IActionResult> UpdatePageRequest(string Description, IFormFile ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks)
         {
-            UserModel user = await _userManager.GetUserAsync(User);
-            await _sendEmail.UpdatePage(user, AccountNumber, Description, ProfileImage, NotifyImages, NotifyEvents, BioLinks);
-            return View();
+            using (var stream = new MemoryStream())
+            {
+                await ProfileImage.CopyToAsync(stream);
+                byte[] fileBytes = stream.ToArray();
+
+                UserModel user = await _userManager.GetUserAsync(User);
+
+                string result = await _pageFunctions.UpdatePage(user, Description, fileBytes, Path.GetExtension(ProfileImage.FileName).ToLower(), NotifyImages, NotifyEvents, BioLinks);
+
+
+                return RedirectToAction("UpdatePageResult", "Creator", new { Id_Creator = user.Id, result = result });
+            }
         }
 
 
+
+
+
+
+
+
         [HttpGet]
-        public async Task<IActionResult> UpdatePageAction(string UserFromEmailId, string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks)
+        public async Task<IActionResult> UpdatePageAccountNumber(string Id_Creator)
+        {
+            CreatorPageShow pageShow = await _pageFunctions.GetPageForUpdate(Id_Creator);
+            return View(pageShow);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePageAccountNumberRequest(string AccountNumber)
         {
             UserModel user = await _userManager.GetUserAsync(User);
-            string result = await _functionsFromEmail.UpdatePageFinalizator(UserFromEmailId, AccountNumber, Description, ProfileImage, NotifyImages, NotifyEvents, BioLinks, user);
+
+            await _sendEmail.UpdatePage(user, AccountNumber);
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdatePageAction(string UserFromEmailId, string AccountNumber)
+        {
+            UserModel user = await _userManager.GetUserAsync(User);
+            string result = await _functionsFromEmail.UpdatePageFinalizator(UserFromEmailId, AccountNumber, user);
 
             return RedirectToAction("UpdatePageResult", "Creator", new { Id_Creator = user.Id, result = result });
         }
@@ -127,6 +163,12 @@ namespace Creators.Creators.Controllers
             ViewBag.Result = result;
             return View();   
         }
+
+
+
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> ManageCreatorPage()

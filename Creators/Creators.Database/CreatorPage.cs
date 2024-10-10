@@ -11,10 +11,8 @@ namespace Creators.Creators.Database
         public string Id_Photos { get; set;}
         public string Id_Donates { get; set;}
         public string Account_Numer {  get; set; }
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal Account_Balance { get; set; }
-        [Column(TypeName = "decimal(5, 2)")]
 
+        [Column(TypeName = "decimal(5, 2)")]
         public decimal Site_Commission { get; set; }
 
 

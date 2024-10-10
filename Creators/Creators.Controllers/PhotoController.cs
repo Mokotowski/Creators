@@ -179,6 +179,7 @@ namespace Creators.Creators.Controllers
         private async Task<IActionResult> GetRedirect()
         {
             string Id_Photos = HttpContext.Session.GetString("Id_Photos");
+
             if (string.IsNullOrEmpty(Id_Photos))
             {
                 return RedirectToAction("UserCreatorsPhotos");

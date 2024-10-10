@@ -8,6 +8,6 @@ namespace Creators.Creators.Services.Interface
 
         public Task ResetPassword(string code, string Email, string password);
 
-        public Task<string> UpdatePageFinalizator(string UserFromEmailId, string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks, UserModel ActualUser);
+        public Task<string> UpdatePageFinalizator(string UserFromEmailId, string AccountNumber, UserModel ActualUser);
     }
 }

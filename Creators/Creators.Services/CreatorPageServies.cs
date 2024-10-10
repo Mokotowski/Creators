@@ -1,6 +1,7 @@
 ﻿using Creators.Creators.Database;
 using Creators.Creators.Models;
 using Creators.Creators.Services.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
@@ -18,26 +19,32 @@ namespace Creators.Creators.Services
             _logger = logger;
 
         }
-        public async Task<string> CreatePage(UserModel user, string accountNumber, string description, string profileImage, bool notifyImages, bool notifyEvents, string bioLinks)
+        public async Task<string> CreatePage(UserModel user, string accountNumber, string description, byte[] profileImage, string profileImageExtension, bool notifyImages, bool notifyEvents, string bioLinks)
         {
+            // Sprawdzanie, czy użytkownik jest null
             if (user == null)
             {
                 _logger.LogWarning("CreatePage called with null user.");
                 return "Error";
             }
 
+            // Sprawdzanie, czy inne parametry są poprawne
             if (string.IsNullOrEmpty(accountNumber) || string.IsNullOrEmpty(description))
             {
-                _logger.LogWarning("CreatePage called with invalid parameters.");
+                _logger.LogWarning("CreatePage called with invalid parameters: accountNumber or description is null or empty.");
                 return "Error";
             }
 
             try
             {
+
+
+                // Sprawdzanie, czy strona nie istnieje
                 if (!_databaseContext.CreatorPage.Any(p => p.Id_Creator == user.Id))
                 {
                     user.IsCreator = true;
 
+                    // Tworzenie nowej strony dla użytkownika
                     var page = new CreatorPage
                     {
                         Id_Creator = user.Id,
@@ -45,7 +52,6 @@ namespace Creators.Creators.Services
                         Id_Photos = user.Id,
                         Id_Donates = user.Id,
                         Account_Numer = accountNumber,
-                        Account_Balance = 0,
                         Site_Commission = 0.05m,
                         User = user
                     };
@@ -56,6 +62,7 @@ namespace Creators.Creators.Services
                         Description = description,
                         ProfilName = user.UserName,
                         ProfilPicture = profileImage,
+                        ProfilPictureExtension = profileImageExtension,
                         EmailNotificationsPhoto = notifyImages,
                         EmailNotificationsEvents = notifyEvents,
                         BioLinks = bioLinks,
@@ -64,7 +71,7 @@ namespace Creators.Creators.Services
 
                     var balance = new CreatorBalance
                     {
-                        Id_Creator = user.Id,  
+                        Id_Creator = user.Id,
                         Balance = 0,
                         LastCashout = DateTime.Now,
                         LastDeposit = DateTime.Now,
@@ -93,7 +100,57 @@ namespace Creators.Creators.Services
             }
         }
 
-        public async Task<string> UpdatePage(UserModel user, string accountNumber, string description, string profileImage, bool notifyImages, bool notifyEvents, string bioLinks)
+
+        public async Task<string> UpdatePage(UserModel user, string description, byte[] profileImage, string profileImageExtension, bool notifyImages, bool notifyEvents, string bioLinks)
+        {
+            if (user == null)
+            {
+                _logger.LogWarning("UpdatePage called with null user.");
+                return "Error";
+            }
+
+            if (string.IsNullOrEmpty(description))
+            {
+                _logger.LogWarning("UpdatePage called with invalid description.");
+                return "Error";
+            }
+
+            if (string.IsNullOrEmpty(bioLinks))
+            {
+                _logger.LogWarning("UpdatePage called with invalid bio links.");
+                return "Error";
+            }
+
+
+            try
+            {
+                var dPage = await _databaseContext.PageData.FindAsync(user.Id);
+
+                if (dPage == null)
+                {
+                    _logger.LogInformation("UpdatePage attempt failed for user {UserId}: page does not exist.", user.Id);
+                    return "Exist";
+                }
+
+                dPage.Description = description;
+                dPage.ProfilPicture = profileImage;
+                dPage.ProfilPictureExtension = profileImageExtension;
+                dPage.EmailNotificationsPhoto = notifyImages;
+                dPage.EmailNotificationsEvents = notifyEvents;
+                dPage.BioLinks = bioLinks;
+
+                await _databaseContext.SaveChangesAsync();
+
+                _logger.LogInformation("Page updated successfully for user {UserId}.", user.Id);
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating the page for user {UserId}.", user.Id);
+                return "Error";
+            }
+        }
+        public async Task<string> UpdatePageAccount(UserModel user, string accountNumber)
         {
             if (user == null)
             {
@@ -107,43 +164,17 @@ namespace Creators.Creators.Services
                 return "Error";
             }
 
-            if (string.IsNullOrEmpty(description))
-            {
-                _logger.LogWarning("UpdatePage called with invalid description.");
-                return "Error";
-            }
-
-            if (string.IsNullOrEmpty(profileImage))
-            {
-                _logger.LogWarning("UpdatePage called with invalid profile image.");
-                return "Error";
-            }
-
-            if (string.IsNullOrEmpty(bioLinks))
-            {
-                _logger.LogWarning("UpdatePage called with invalid bio links.");
-                return "Error";
-            }
-
-
             try
             {
                 var cPage = await _databaseContext.CreatorPage.FindAsync(user.Id);
-                var dPage = await _databaseContext.PageData.FindAsync(user.Id);
 
-                if (cPage == null || dPage == null)
+                if (cPage == null)
                 {
                     _logger.LogInformation("UpdatePage attempt failed for user {UserId}: page does not exist.", user.Id);
                     return "Exist";
                 }
 
                 cPage.Account_Numer = accountNumber;
-
-                dPage.Description = description;
-                dPage.ProfilPicture = profileImage;
-                dPage.EmailNotificationsPhoto = notifyImages;
-                dPage.EmailNotificationsEvents = notifyEvents;
-                dPage.BioLinks = bioLinks;
 
                 await _databaseContext.SaveChangesAsync();
 
@@ -183,6 +214,7 @@ namespace Creators.Creators.Services
                     pageData.ProfilName,
                     pageData.Description,
                     pageData.ProfilPicture,
+                    pageData.ProfilPictureExtension,
                     pageData.BioLinks,
                     pageData.Id_Creator,
                     creatorPage.Id_Calendar,
@@ -231,6 +263,7 @@ namespace Creators.Creators.Services
                     creatorPage.Account_Numer,
                     pageData.Description,
                     pageData.ProfilPicture,
+                    pageData.ProfilPictureExtension,
                     pageData.BioLinks,
                     pageData.EmailNotificationsPhoto,
                     pageData.EmailNotificationsEvents,
@@ -267,7 +300,7 @@ namespace Creators.Creators.Services
 
             for (int i = 0; i < pages.Count; i++)
             {
-                CreatorsSearch searchItem = new CreatorsSearch(pages[i].Id_Creator, pages[i].ProfilName, pages[i].ProfilPicture);
+                CreatorsSearch searchItem = new CreatorsSearch(pages[i].Id_Creator, pages[i].ProfilName, pages[i].ProfilPicture, pages[i].ProfilPictureExtension);
                 search.Add(searchItem);
             }
 

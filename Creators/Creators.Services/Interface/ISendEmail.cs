@@ -6,6 +6,6 @@ namespace Creators.Creators.Services.Interface
     {
         public Task SendConfirmedEmail(string Email);
         public Task SendResetPasswordEmail(string EMail);
-        public Task UpdatePage(UserModel UserFromEmail, string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks);
+        public Task UpdatePage(UserModel User, string AccountNumber);
     }
 }

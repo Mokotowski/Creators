@@ -337,7 +337,7 @@ namespace Creators.Creators.Services
 
 
 
-        public async Task UpdatePage(UserModel User, string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks)
+        public async Task UpdatePage(UserModel User, string AccountNumber)
         {
 
             if (string.IsNullOrWhiteSpace(User.Email))
@@ -371,7 +371,7 @@ namespace Creators.Creators.Services
                     httpContext: httpContext,
                     action: "UpdatePageAction",
                     controller: "Creator",
-                    values: new { UserFromEmailId = User.Id, AccountNumber = AccountNumber, Description = Description, ProfileImage = ProfileImage, NotifyImages = NotifyImages, NotifyEvents = NotifyEvents, BioLinks = BioLinks },
+                    values: new { UserFromEmailId = User.Id, AccountNumber = AccountNumber },
                     scheme: httpContext.Request.Scheme);
 
                 _logger.LogInformation("Generated callback URL: {CallbackUrl} for AccountNumber: {AccountNumber}", callbackUrl, AccountNumber);
@@ -424,9 +424,9 @@ namespace Creators.Creators.Services
                     <body>
                         <div class='container'>
                             <h1>Update Request Received</h1>
-                            <p>Your request to update your profile has been successfully submitted. Please check your email for further details.</p>
+                            <p>Your request to update your account number has been successfully submitted. Please check your email for further details.</p>
                             <p>If you did not initiate this request, please ignore this message or contact our support team.</p>
-                            <p><a href='{callbackUrl}' class='button'>Update Profile</a></p>
+                            <p><a href='{callbackUrl}' class='button'>Update Account Number</a></p>
                             <div class='footer'>
                                 <p>&copy; 2024 Creators. All rights reserved.</p>
                             </div>
@@ -440,7 +440,7 @@ namespace Creators.Creators.Services
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress(smtpSettings["SenderEmail"], smtpSettings["SenderName"]),
-                    Subject = "Profile Update Request",
+                    Subject = "Account Number Update Request",
                     Body = message,
                     IsBodyHtml = true,
                 };
@@ -469,7 +469,7 @@ namespace Creators.Creators.Services
 
 
 
-        public async Task<string> UpdatePageFinalizator(string UserFromEmailId, string AccountNumber, string Description, string ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks, UserModel ActualUser)
+        public async Task<string> UpdatePageFinalizator(string UserFromEmailId, string AccountNumber, UserModel ActualUser)
         {
             _logger.LogInformation("UpdatePageFinalizator started for email {Email}", ActualUser.Email);
 
@@ -486,7 +486,7 @@ namespace Creators.Creators.Services
 
                 _logger.LogInformation("Attempting to update page for email {Email}", ActualUser.Email);
 
-                string result = await _pageFunctions.UpdatePage(ActualUser, AccountNumber, Description, ProfileImage, NotifyImages, NotifyEvents, BioLinks);
+                string result = await _pageFunctions.UpdatePageAccount(ActualUser, AccountNumber);
 
                 _logger.LogInformation("Page update completed for email: {Email} with result: {Result}", ActualUser.Email, result);
 
@@ -615,6 +615,119 @@ namespace Creators.Creators.Services
         }
 
 
+        public async Task SendNotificationAddPhotoEmail(string email, string Id_Photos, DateOnly date, string description, string Nick)
+        {
+            try
+            {
+                _logger.LogInformation("Starting to send notification email for event. Recipient: {Email}, Photos ID: {IdPhotos}, Date: {Date}", email, Id_Photos, date);
+
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(Id_Photos))
+                {
+                    _logger.LogWarning("Email address or Photos ID is null or empty. Email: {Email}, Photos ID: {IdPhotos}", email, Id_Photos);
+                    throw new ArgumentException("Email address and Calendar ID must be provided.");
+                }
+
+                var mailAddress = new MailAddress(email);
+
+                var smtpSettings = _configuration.GetSection("SmtpSettings");
+
+                var smtpClient = new SmtpClient(smtpSettings["SmtpServer"])
+                {
+                    Port = int.Parse(smtpSettings["Port"]),
+                    Credentials = new NetworkCredential(smtpSettings["Username"], smtpSettings["Password"]),
+                    EnableSsl = bool.Parse(smtpSettings["EnableSsl"]),
+                };
+
+                var httpContext = _httpContextAccessor.HttpContext;
+                string callbackUrl = _linkGenerator.GetUriByAction(
+                    httpContext: httpContext,
+                    action: "UserCreatorPhotos",
+                    controller: "Photo",
+                    values: new { Id_Photos = Id_Photos },
+                    scheme: httpContext.Request.Scheme);
+
+                string message = $@"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            color: #333;
+                            line-height: 1.6;
+                            padding: 20px;
+                        }}
+                        .container {{
+                            max-width: 600px;
+                            margin: 0 auto;
+                            background: #fff;
+                            padding: 20px;
+                            border-radius: 8px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }}
+                        h1 {{
+                            color: #333;
+                        }}
+                        p {{
+                            margin-bottom: 20px;
+                        }}
+                        a.button {{
+                            display: inline-block;
+                            background-color: #007BFF;
+                            color: #fff;
+                            padding: 10px 20px;
+                            text-decoration: none;
+                            border-radius: 5px;
+                            font-weight: bold;
+                        }}
+                        .footer {{
+                            margin-top: 20px;
+                            text-align: center;
+                            font-size: 0.9em;
+                            color: #777;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <h1>New Photo Added</h1>
+                        <p>Hello,</p>
+                        <p>A new photo has been added by <strong>{Nick}</strong>, a creator you are following.</p>
+                        <p><strong>Date:</strong> {date.ToString("yyyy-MM-dd")}</p>
+                        <p><strong>Description:</strong> {description}</p>
+                        <p>To view this photo, please follow the link below:</p>
+                        <p><a href='{HtmlEncoder.Default.Encode(callbackUrl)}' class='button'>View new photo</a></p>
+                        <div class='footer'>
+                            <p>&copy; 2024 Creators. All rights reserved.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
+
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(smtpSettings["SenderEmail"], smtpSettings["SenderName"]),
+                    Subject = "Photo Notification",
+                    Body = message,
+                    IsBodyHtml = true,
+                };
+
+                mailMessage.To.Add(mailAddress);
+
+                await smtpClient.SendMailAsync(mailMessage);
+
+                _logger.LogInformation("Notification email successfully sent to {Email} for new photo {IdPhotos}.", email, Id_Photos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while sending notification email for new photo {IdPhotos} to {Email}.", Id_Photos, email);
+                throw;
+            }
+        }
 
 
 
