@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="~/css/creatorPage.css" />
     <style>
         .btn-primary {
-            margin: 5px; /* Dodaj marginesy 5px do przycisków */
+            margin: 5px;
         }
     </style>
 }
@@ -16,36 +16,42 @@
         <h1 class="profile-name">@Model.ProfilName</h1>
     </div>
 
-    <div class="creator-info followers">
-        <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">Check creator fans</a>
-    </div>
-
-    <div class="creator-info followers">
-        <a href="@Url.Action("ShowSchedule", "Schedule", new { Id_Calendar = @Model.Id_Calendar })" class="btn btn-primary">Show events calendar</a>
-    </div>
-
-    <div class="donate-section">
-        <a href="@Url.Action("DonateCreator", "Donate", new { Creator = @Model.ProfilName, Id_Donates = @Model.Id_Donates })" class="btn btn-primary">Donate Now</a>
-    </div>
-
-    <div class="following">
-        @if (ViewBag.IsFollowing)
-        {
-            <a href="@Url.Action("UnFollow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">UnFollow</a>
-        }
-        else
-        {
-            <a href="@Url.Action("Follow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">Follow</a>
-        }
-    </div>
-
-    <div class="photos">
-        <a href="@Url.Action("UserCreatorPhotos", "Photo", new { Id_Photos = @Model.Id_Photos })" class="btn btn-primary">Check photos</a>
-    </div>
-
     <div class="profile-description">
         <p>@Model.Description</p>
     </div>
+
+    <div class="profile-action">
+        <div class="creator-info followers">
+            <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">Check creator fans</a>
+        </div>
+        <div class="donate-section">
+            <a href="@Url.Action("DonateCreator", "Donate", new { Creator = @Model.ProfilName, Id_Donates = @Model.Id_Donates })" class="btn btn-primary">Donate Now</a>
+        </div>
+
+        <div class="following">
+            @if (ViewBag.IsFollowing)
+            {
+                <a href="@Url.Action("UnFollow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">UnFollow</a>
+            }
+            else
+            {
+                <a href="@Url.Action("Follow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">Follow</a>
+            }
+        </div>
+
+        <div class="photos">
+            <a href="@Url.Action("UserCreatorPhotos", "Photo", new { Id_Photos = @Model.Id_Photos })" class="btn btn-primary">Check photos</a>
+        </div>
+
+        <div class="creator-info followers">
+            <a href="@Url.Action("ShowSchedule", "Schedule", new { Id_Calendar = @Model.Id_Calendar })" class="btn btn-primary">Show events calendar</a>
+        </div>
+
+        <div class="an">
+            <a href="@Url.Action("CreatorAnnouncement", "Announcement", new { Id_Announcement = @Model.Id_Announcement })" class="btn btn-primary">Check announcement</a>
+        </div>
+    </div>
+
 
     <div class="profile-links">
         <h2>Find me on:</h2>

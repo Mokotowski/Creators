@@ -1,0 +1,29 @@
+﻿@model List<Creators.Creators.Database.CreatorAnnouncement>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/announcementview.css" />
+}
+
+
+<h2>Announcements from Followed Creators</h2>
+
+@if (Model.Any())
+{
+    @foreach (var announcement in Model)
+    {
+        <div class="announcement-item">
+            <p><strong>@announcement.Creator</strong> - @announcement.DateTime.ToString("MMMM dd, yyyy")</p>
+            @if (announcement.IsUpdated)
+            {
+                <p><em>This announcement was updated.</em></p>
+            }
+            <h3>@announcement.Title</h3>
+            <p>@announcement.Description</p>
+        </div>
+        <hr />
+    }
+}
+else
+{
+    <p>You are not following any creators or there are no announcements available.</p>
+}

@@ -24,6 +24,7 @@ namespace Creators.Creators.Database
         public DbSet<Messages> Messages { get; set; }
         public DbSet<Chats> Chats { get; set; }
         public DbSet<Blocklist> Blocklist { get; set; }
+        public DbSet<CreatorAnnouncement> CreatorAnnouncement { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -89,6 +90,13 @@ namespace Creators.Creators.Database
                 .WithMany(c => c.Messages)
                 .HasForeignKey(d => d.Chat_Id)
                 .HasPrincipalKey(c => c.Id);
+
+
+            modelBuilder.Entity<CreatorAnnouncement>()
+                .HasOne(d => d.CreatorPage)
+                .WithMany(c => c.CreatorAnnouncement)
+                .HasForeignKey(d => d.Id_Announcement)
+                .HasPrincipalKey(c => c.Id_Announcement);
 
 
             base.OnModelCreating(modelBuilder);

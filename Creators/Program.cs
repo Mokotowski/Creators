@@ -90,6 +90,8 @@ builder.Services.AddScoped<IChatsActions, ChatServices>();
 
 builder.Services.AddScoped<IUserData, UserDataServices>();
 
+builder.Services.AddScoped<IAnnouncementData, AnnouncementServices>();
+builder.Services.AddScoped<IAnnouncementManage, AnnouncementServices>();
 
 
 builder.Services.AddRazorPages();

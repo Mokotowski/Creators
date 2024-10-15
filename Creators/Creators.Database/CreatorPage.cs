@@ -10,6 +10,7 @@ namespace Creators.Creators.Database
         public string Id_Calendar { get; set; }
         public string Id_Photos { get; set;}
         public string Id_Donates { get; set;}
+        public string Id_Announcement { get; set;}
         public string Account_Numer {  get; set; }
 
         [Column(TypeName = "decimal(5, 2)")]
@@ -22,5 +23,6 @@ namespace Creators.Creators.Database
         public List<Donates> Donates { get; set; }
         public List<CalendarEvents> CalendarEvents { get; set; }
         public List<CreatorPhoto> CreatorPhotos { get; set; }
+        public List<CreatorAnnouncement> CreatorAnnouncement { get; set; }
     }
 }

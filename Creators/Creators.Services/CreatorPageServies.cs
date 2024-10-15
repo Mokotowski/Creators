@@ -51,6 +51,7 @@ namespace Creators.Creators.Services
                         Id_Calendar = user.Id,
                         Id_Photos = user.Id,
                         Id_Donates = user.Id,
+                        Id_Announcement = user.Id,
                         Account_Numer = accountNumber,
                         Site_Commission = 0.05m,
                         User = user
@@ -219,7 +220,8 @@ namespace Creators.Creators.Services
                     pageData.Id_Creator,
                     creatorPage.Id_Calendar,
                     creatorPage.Id_Donates,
-                    creatorPage.Id_Photos
+                    creatorPage.Id_Photos,
+                    creatorPage.Id_Announcement
                 );
 
                 _logger.LogInformation("Successfully retrieved page data for user with ID: {Id_Creator}", Id_Creator);
@@ -269,7 +271,8 @@ namespace Creators.Creators.Services
                     pageData.EmailNotificationsEvents,
                     pageData.Id_Creator,
                     creatorPage.Id_Donates,
-                    creatorPage.Id_Photos
+                    creatorPage.Id_Photos,
+                    creatorPage.Id_Announcement
                 );
 
                 _logger.LogInformation("Successfully retrieved page and creator data for update with ID: {Id_Creator}", Id_Creator);
