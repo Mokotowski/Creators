@@ -2,3 +2,26 @@
     ViewData["Title"] = "Home Page";
 }
 
+<div id="hello" style="text-align: center; padding: 20px;">
+
+    <h1>Welcome to Creators!</h1>
+
+    <p>Creators is the platform where you can directly support your favorite creators, connect with them, and stay updated on their latest activities.</p>
+
+    <p>With Creators, you can:</p>
+    <ul style="list-style: none; text-align: left; display: inline-block;">
+        <li>✔ Support creators through secure donations.</li>
+        <li>✔ Receive notifications about new content, events, and activities.</li>
+        <li>✔ Communicate directly with creators using our tools.</li>
+    </ul>
+
+    <p>Join the Creators community today and support those who inspire you every day!</p>
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div id="account-actions"> 
+            <a class="btn btn-primary" href="@Url.Action("Login", "Account")">Login</a>
+            <a class="btn btn-primary" href="@Url.Action("Register", "Account")">Register</a>
+        </div>
+    }
+</div>

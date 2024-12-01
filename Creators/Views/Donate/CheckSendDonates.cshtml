@@ -1,39 +1,41 @@
 ﻿@model List<Creators.Creators.Models.DonateUserForView>
 @section Styles {
-    <link rel="stylesheet" href="~/css/donates-list.css" />
-}
-@{
-    ViewData["Title"] = "Your Donations";
+    <link rel="stylesheet" href="~/css/donate.css" />
 }
 
-@if (Model != null && Model.Count > 0)
-{
-    <div id="donates-section">
-        <h2>Donations</h2>
-        <table id="donates-table">
-            <thead>
-                <tr>
-                    <th>Creator</th>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Currency</th>
-                </tr>
-            </thead>
-            <tbody>
+@{
+    ViewData["Title"] = $"Check my donates";
+}
+
+
+<div class="donate-container-info">
+
+    <h2>My Donates</h2>
+
+    <div class="donate-list">
+        @if (Model.Any())
+        {
+            <ul>
                 @foreach (var donate in Model.OrderByDescending(d => d.DateTime))
                 {
-                    <tr>
-                        <td>@donate.Creator</td>
-                        <td>@donate.DateTime.ToString("yyyy-MM-dd HH:mm")</td>
-                        <td>@donate.Count</td>
-                        <td>@donate.Currency</td>
-                    </tr>
+                    <div class="donate-item">
+                        <li>
+                            <p>@donate.Creator - @donate.DateTime.ToString("yyyy-MM-dd HH:mm")</p>
+                            <p><strong>@donate.Count @donate.Currency</strong></p>
+                        </li>
+                    </div>
                 }
-            </tbody>
-        </table>
+            </ul>
+        }
+        else
+        {
+            <div class="donate-info">
+                <p>You haven't made any donations yet.</p>
+            </div>
+        }
     </div>
-}
-else
-{
-    <p>You haven't made any donations yet.</p>
-}
+</div>
+
+
+
+

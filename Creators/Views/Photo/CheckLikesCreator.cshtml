@@ -1,34 +1,36 @@
 ﻿@model List<Creators.Creators.Database.PhotoHearts>
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/photos.css" />
+}
+
 @{
-    ViewData["Title"] = "Likes for Creator's Photos";
+    ViewData["Title"] = "Likes";
 }
 
-<h2>@ViewData["Title"]</h2>
 
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <td>User</td>
-                <th>User Id</th>
-                <th>Heart Group</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var heart in Model)
-            {
-                <tr>
-                    <td>@heart.User</td>
-                    <td>@heart.Id_User</td>
-                    <td>@heart.HeartGroup</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No likes available for this creator's photos.</p>
-}
+<div class="photo-container-info">
+
+    <h2>Manage Likes</h2>
+
+
+    <div class="photo-list">
+        @if (Model.Any())
+        {
+            <ul>
+                @foreach (var heart in Model)
+                {
+                    <div class="photo-item">
+                    <li>@heart.User - @heart.Id_User</li>
+            </div>
+                }
+        </ul>
+        }
+        else
+        {
+        <div class="photo-info">
+            <p>No likes available for this creator's photos.</p>
+        </div>
+        }
+    </div>
+</div>

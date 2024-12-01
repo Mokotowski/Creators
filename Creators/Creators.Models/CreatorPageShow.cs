@@ -16,7 +16,7 @@
         public string Id_Photos { get; set; }
         public string Id_Announcement { get; set; }
 
-        public CreatorPageShow(string accountNumber, string description, byte[] profilPicture, string profilPictureExtension, string bioLinks, bool notifyEvents, bool notifyImages, string id_Creator, string id_Donates, string id_Photos, string id_Announcement)
+        public CreatorPageShow(string accountNumber, string description, byte[] profilPicture, string profilPictureExtension, string bioLinks, bool notifyEvents, bool notifyImages, string id_Creator, string id_Calendar, string id_Donates, string id_Photos, string id_Announcement)
         {
             AccountNumber = accountNumber;
             Description = description;
@@ -26,6 +26,7 @@
             NotifyEvents = notifyEvents;
             NotifyImages = notifyImages;
             Id_Creator = id_Creator;
+            Id_Calendar = id_Calendar;
             Id_Donates = id_Donates;
             Id_Photos = id_Photos;
             Id_Announcement = id_Announcement;

@@ -102,7 +102,7 @@ namespace Creators.Creators.Services
         }
 
 
-        public async Task<string> UpdatePage(UserModel user, string description, byte[] profileImage, string profileImageExtension, bool notifyImages, bool notifyEvents, string bioLinks)
+        public async Task<string> UpdatePage(UserModel user, string description, byte[]? profileImage, string? profileImageExtension, bool notifyImages, bool notifyEvents, string bioLinks)
         {
             if (user == null)
             {
@@ -134,8 +134,15 @@ namespace Creators.Creators.Services
                 }
 
                 dPage.Description = description;
-                dPage.ProfilPicture = profileImage;
-                dPage.ProfilPictureExtension = profileImageExtension;
+                if (profileImage != null)
+                {
+                    dPage.ProfilPicture = profileImage;
+
+                }
+                if (profileImageExtension != null)
+                {
+                    dPage.ProfilPictureExtension = profileImageExtension;
+                }
                 dPage.EmailNotificationsPhoto = notifyImages;
                 dPage.EmailNotificationsEvents = notifyEvents;
                 dPage.BioLinks = bioLinks;
@@ -270,6 +277,7 @@ namespace Creators.Creators.Services
                     pageData.EmailNotificationsPhoto,
                     pageData.EmailNotificationsEvents,
                     pageData.Id_Creator,
+                    creatorPage.Id_Calendar,
                     creatorPage.Id_Donates,
                     creatorPage.Id_Photos,
                     creatorPage.Id_Announcement

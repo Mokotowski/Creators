@@ -1,11 +1,13 @@
 ﻿using Creators.Creators.Database;
 using Creators.Creators.Models;
 using Creators.Creators.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Creators.Creators.Controllers
 {
+    [Authorize]
     public class PhotoController : Controller
     {
         private readonly UserManager<UserModel> _userManager;

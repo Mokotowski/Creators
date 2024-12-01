@@ -1,24 +1,48 @@
 ﻿@model List<Creators.Creators.Models.UserForChats>
 
-@foreach(var user in Model)
-{
-    <p> @user.Firstname @user.Lastname </p>
-    <p> @user.UserName </p>
-    if(user.ChatExist)
+@section Styles {
+    <link rel="stylesheet" href="~/css/chats.css" />
+}
+
+@{
+    ViewData["Title"] = "Search result";
+}
+
+
+<div class="chat-container-info">
+    <h2>Found Users</h2>
+
+    @if (Model.Any())
     {
-        <form asp-action="Chat" method="get">
-            <input type="hidden" name="Id" value="@user.Chat_Id" />
-            <button type="submit" class="btn btn-danger">Chat</button>
-        </form>
+        <ul class="chat-list">
+            @foreach (var user in Model)
+            {
+                <li class="chat-item">
+                    <div class="chat-info">
+                        <p> @user.Firstname @user.Lastname </p>
+                        <p> @user.UserName </p>
+                    </div>
+                    @if (user.ChatExist)
+                    {
+                        <a href="@Url.Action("Chat", "Chat", new { Id = user.Chat_Id })" class="chat-button">Chat</a>
+                    }
+                    else
+                    {
+                        <form asp-action="MakeChat" method="post">
+                            <input type="hidden" name="Id_User" value="@user.Id" />
+                            <button class="chat-button" type="submit" class="btn btn-danger">Start chat</button>
+                        </form>
+                    }
+                    <hr />
+
+                </li>
+            }
+        </ul>
+
     }
     else
     {
-        <form asp-action="MakeChat" method="post">
-            <input type="hidden" name="Id_User" value="@user.Id" />
-            <button type="submit" class="btn btn-danger">Start chat</button>
-        </form>
+        <p>No users found.</p>
     }
-
-
-}
+</div>
 

@@ -1,5 +1,18 @@
-﻿<div class="thank-you-container">
-    <h1>Thank You!</h1>
-    <p>Thank you for using our platform and supporting its growth. We’re excited to have you with us!</p>
-    <p>You can view your page at the following link:, <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = ViewBag.Id_Creator })">click here</a>.</p>
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/creator.css" />
+}
+
+@{
+    ViewData["Title"] = "Thanks";
+}
+
+
+
+<div class="creator-container-info">
+    <div class="creator-info">
+        <h1>Thank You!</h1>
+        <p>Thank you for using our platform and supporting its growth</p>
+        <p>We’re excited to have you with us!</p>
+        <p>You can view your page at the following link <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = ViewBag.Id_Creator })">here</a></p>
+    </div>
 </div>

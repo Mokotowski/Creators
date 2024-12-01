@@ -1,45 +1,88 @@
 ﻿@model Creators.Creators.Models.CreatorPageShow
 
-@{
-    ViewBag.Title = "Manage Creator Page";
+@section Styles {
+    <link rel="stylesheet" href="~/css/creator.css" />
 }
 
-<div class="container-managepage">
-    <h1>Manage Your Creator Page</h1>
+@{
+    ViewData["Title"] = "Manage page";
+}
 
-    <div class="action-list">
-        <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-primary">
-            View Your Page
-        </a>
+<div class="creator-container-info">
+    <h1>Manage Your Page</h1>
 
-        <a href="@Url.Action("UpdatePage", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-warning">
-            Edit Your Page
-        </a>
+    <div class="creator-info">
+        <h2>Profile Actions</h2>
+        <div class="creator-list">
+            <div class="creator-item">
+                <a href="@Url.Action("ShowPage", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-primary">
+                    View Your Page
+                </a>
+            </div>
 
-        <a href="@Url.Action("UpdatePageAccountNumber", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-warning">
-            Edit Your Account Number
-        </a>
+            <div class="creator-item">
+                <a href="@Url.Action("UpdatePage", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-danger">
+                    Edit Your Page
+                </a>
+            </div>
 
-        <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = Model.Id_Creator })" class="btn btn-info">
-            View Your Followers
-        </a>
-
-        <a href="@Url.Action("CheckDonates", "Donate", new { Id_Donates = Model.Id_Donates })" class="btn btn-primary">
-            Check Donates
-        </a>
-
-        <a href="@Url.Action("Payout", "Donate")" class="btn btn-primary">
-            Make Payout
-        </a>
+            <div class="creator-item">
+                <a href="@Url.Action("UpdatePageAccountNumber", "Creator", new { Id_Creator = Model.Id_Creator })" class="btn btn-danger">
+                    Edit Account Number
+                </a>
+            </div>
+        </div>
+    </div>
 
 
-        <a href="@Url.Action("ManagePhotos", "Photo")" class="btn btn-primary">
-            Manage Photos
-        </a>
+    <div class="creator-info">
+        <h2>Financial Actions</h2>
+        <div class="creator-list">
+            <div class="creator-item">
+                <a href="@Url.Action("Payout", "Donate")" class="btn btn-danger">
+                    Make Payout
+                </a>
+            </div>
 
-        <a href="@Url.Action("ManageAnnouncement", "Announcement")" class="btn btn-primary">
-            Manage Announcements
-        </a>
+            <div class="creator-item">
+                <a href="@Url.Action("CheckDonates", "Donate", new { Id_Donates = Model.Id_Donates })" class="btn btn-primary">
+                    Check Donates
+                </a>
+            </div>
+        </div>
+    </div>
 
+    <div class="creator-info">
+        <h2>Content Management</h2>
+        <div class="creator-list">
+            <div class="creator-item">
+                <a href="@Url.Action("ManagePhotos", "Photo")" class="btn btn-warning">
+                    Manage Photos
+                </a>
+            </div>
+
+            <div class="creator-item">
+                <a href="@Url.Action("ManageAnnouncement", "Announcement")" class="btn btn-warning">
+                    Manage Announcements
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="creator-info">
+        <h2>Engagement</h2>
+        <div class="creator-list">
+            <div class="creator-item">
+                <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = Model.Id_Creator })" class="btn btn-info">
+                    View Your Followers
+                </a>
+            </div>
+
+            <div class="creator-item">
+                <a href="@Url.Action("ScheduleManage", "Schedule", new { Id_Calendar = Model.Id_Calendar })" class="btn btn-warning">
+                    Manage Calendar
+                </a>
+            </div>
+        </div>
     </div>
 </div>

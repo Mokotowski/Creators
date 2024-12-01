@@ -1,29 +1,41 @@
 ﻿@model List<Creators.Creators.Database.CreatorAnnouncement>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/announcementview.css" />
+    <link rel="stylesheet" href="~/css/announcement.css" />
 }
 
+@{
+    ViewData["Title"] = "Announcements";
+}
 
-<h2>Announcements from Followed Creators</h2>
+<div class="container-announcement">
+    <div class="announcement-actions">
+        <h2>Announcements</h2>
 
-@if (Model.Any())
-{
-    @foreach (var announcement in Model)
-    {
-        <div class="announcement-item">
-            <p><strong>@announcement.Creator</strong> - @announcement.DateTime.ToString("MMMM dd, yyyy")</p>
-            @if (announcement.IsUpdated)
+        @if (Model.Any())
+        {
+            @foreach (var announcement in Model.OrderByDescending(a => a.DateTime))
             {
-                <p><em>This announcement was updated.</em></p>
+                <div class="announcement-user">
+                    <p>
+                        <strong>@announcement.Creator</strong> 
+                        @if (announcement.IsUpdated)
+                        {
+                            <b>- Updated</b>
+                        }
+
+                        - @announcement.DateTime.ToString("dd.MM.yyyy HH:mm")
+                    </p>
+
+                    <h3>@announcement.Title</h3>
+                    <p>@announcement.Description</p>
+                </div>
             }
-            <h3>@announcement.Title</h3>
-            <p>@announcement.Description</p>
-        </div>
-        <hr />
-    }
-}
-else
-{
-    <p>You are not following any creators or there are no announcements available.</p>
-}
+        }
+        else
+        {
+            <p>No announcements available.</p>
+        }
+    </div>
+</div>
+

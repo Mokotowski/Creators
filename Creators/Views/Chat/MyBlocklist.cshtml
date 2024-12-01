@@ -1,15 +1,42 @@
 ﻿@model List<Creators.Creators.Database.Blocklist>;
 
-
-@foreach(var block in Model)
-{
-    <p>@block.UserName</p>
-    <form method="post" asp-action="UnblockUser" asp-controller="Chat">
-        <input type="hidden" name="Id" value="@block.Id" />
-
-        <button type="submit">Unblock</button>
-    </form>
-    <br />
-    <br />
-    <br />
+@section Styles {
+    <link rel="stylesheet" href="~/css/chats.css" />
 }
+
+@{
+    ViewData["Title"] = "My blocklist";
+}
+
+<div class="chat-container-info">
+    <h2>My blocklist</h2>
+
+    @if (Model.Any())
+    {
+        <ul class="chat-list">
+            @foreach (var block in Model)
+            {
+                <li class="chat-item">
+
+                    <div class="chat-info">
+                        <p>@block.UserName</p>
+                    </div>
+
+                    <form method="post" asp-action="UnblockUser" asp-controller="Chat">
+                        <input type="hidden" name="Id" value="@block.Id" />
+
+                        <button type="submit" class="btn-danger">Unblock</button>
+                    </form>
+
+                    <hr />
+                </li>
+            }
+        </ul>
+
+    }
+    else
+    {
+        <p>No block users found.</p>
+    }
+</div>
+

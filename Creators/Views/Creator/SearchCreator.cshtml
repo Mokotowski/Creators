@@ -1,10 +1,19 @@
-﻿<div class="form-searchcreator">
-    <form id="creatorSearchForm" method="get" asp-action="SearchCreatorResult" asp-controller="Creator">
-        <div class="form-group">
-            <label for="profileName">Profile Name:</label>
-            <textarea id="profileName" name="ProfileName" rows="4" minlength="4" maxlength="50" required placeholder="Enter the name of the creator to search"></textarea>
-        </div>
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/creator.css" />
+}
 
-        <button type="submit" class="btn btn-primary">Search creator</button>
-    </form>
-</div>
+@{
+    ViewData["Title"] = "Search creator";
+}
+
+
+<div class="creator-container-info">
+    <div class="creator-form">
+        <form method="get" asp-action="SearchCreatorResult" asp-controller="Creator">
+            <label for="profileName">Find user:</label>
+            <input id="profileName" name="ProfileName" type="text" minlength="5" maxlength="20" pattern="[A-Za-z]+" required placeholder="Enter creator nick" />
+
+            <button type="submit" class="btn btn-primary">Search creator</button>
+        </form>
+    </div>
+</<div>

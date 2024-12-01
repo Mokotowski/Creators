@@ -1,4 +1,5 @@
 using Creators.Creators.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -25,6 +26,7 @@ namespace Creators.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> MyAccount()
         {
             UserModel user = await _userManager.GetUserAsync(User);

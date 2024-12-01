@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PayPal;
 using PayPal.Api;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Creators.Creators.Controllers
 {
+    [Authorize]
     public class DonateController : Controller
     {
         private readonly IPaypalPay _paypalPay;

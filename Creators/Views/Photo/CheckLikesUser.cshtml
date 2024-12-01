@@ -1,21 +1,39 @@
 ﻿@model List<Creators.Creators.Models.HeartsForUser>
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/photos.css" />
+}
+
 @{
-    ViewData["Title"] = "Likes for Photo";
+    ViewData["Title"] = "Likes";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="photo-container-info">
 
-@if (Model != null && Model.Any())
-{
-    <ul>
-        @foreach (var heart in Model)
+    <h2>Likes</h2>
+
+    <div class="photo-list">
+        @if (Model.Any())
         {
-            <li>@heart.User</li>
+            <ul>
+                @foreach (var heart in Model)
+                {
+                    <div class="photo-item">
+                        <li>@heart.User</li>
+                    </div>
+                }
+            </ul>
         }
-    </ul>
-}
-else
-{
-    <p>No users have liked this photo yet.</p>
-}
+        else
+        {
+            <div class="photo-info">
+                <p>No users have liked this photo yet.</p>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+

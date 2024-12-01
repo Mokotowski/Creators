@@ -32,7 +32,7 @@ namespace Creators.Creators.Services
             }
         }
 
-        public async Task<Chats> GetChat(int Id)
+        public async Task<(Chats, string)> GetChat(int Id, UserModel user)
         {
             try
             {
@@ -45,7 +45,23 @@ namespace Creators.Creators.Services
                         .Where(p => p.Chat_Id == chat.Id)
                         .ToListAsync();
                 }
-                return chat;
+
+                string UserName;
+
+                if (chat.Id_User1 == user.Id)
+                {
+                    UserModel friend = await _databaseContext.Users.FindAsync(chat.Id_User2);
+                    UserName = friend.UserName;
+                }
+                else
+                {
+                    UserModel friend = await _databaseContext.Users.FindAsync(chat.Id_User1);
+                    UserName = friend.UserName;
+                }
+
+
+
+                return (chat, UserName);
             }
             catch (Exception ex)
             {

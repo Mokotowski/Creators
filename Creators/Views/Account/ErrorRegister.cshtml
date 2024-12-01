@@ -1,27 +1,23 @@
-﻿@{
-    ViewBag.Title = "Registration Problem";
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
 }
 
-<h2>Registration Problem</h2>
+@{
+    ViewData["Title"] = "Error Register";
+}
 
-<p>
-    We apologize, but there was an issue during the registration process.
-    Please try again.
-</p>
+<div class="container-account">
 
-<p>
-    If the problem persists, please check if the provided email address or phone number has already been used for registration.
-</p>
+    <h2>Registration Problem</h2>
 
-<p>
-    If the issue continues, please contact our technical support for further assistance.
-</p>
+    <p> We apologize, but there was an issue during the registration process. Please try again. </p>
 
-<p>
-    You can try to register again by clicking the link below:
-    <a href="@Url.Action("Register", "Account")">Register Again</a>
-</p>
+    <p> If the problem persists, please check if the provided email address or phone number has already been used for registration. </p>
 
-<p>
-    Thank you for your understanding and we apologize for any inconvenience.
-</p>
+    <p> If the issue continues, please contact our technical support for further assistance. </p>
+
+    <p> You can try to register again by clicking the link <a href="@Url.Action("Register", "Account")">here</a> </p>
+
+    <p> Thank you for your understanding and we apologize for any inconvenience. </p>
+
+</div>

@@ -1,10 +1,12 @@
 ﻿using Creators.Creators.Database;
 using Creators.Creators.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Creators.Creators.Controllers
 {
+    [Authorize]
     public class ScheduleController : Controller
     {
         private readonly IEventsFunctions _eventsFunctions;

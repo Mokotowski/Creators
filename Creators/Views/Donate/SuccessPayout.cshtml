@@ -1,12 +1,16 @@
-﻿@{
-    ViewData["Title"] = "Success";
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/donate.css" />
 }
 
-<div class="container mt-5">
-    <div class="alert alert-success" role="alert">
-        <h4 class="alert-heading">Payout Successful!</h4>
+@{
+    ViewData["Title"] = "Success payout";
+}
+
+<div class="donate-container-info">
+    <div class="donate-info">
+        <h4>Payout Successful!</h4>
         <p>Your payout has been successfully processed. Thank you for using our system!</p>
         <hr>
-        <p class="mb-0">If you have any questions or need further assistance, please contact our support team.</p>
+        <p>If you have any questions or need further assistance, please contact our support team.</p>
     </div>
 </div>

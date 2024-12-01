@@ -1,68 +1,49 @@
 ﻿@model Creators.Creators.Models.CreatorPageShow
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/creatorPage.css" />
-    <style>
-        .btn-primary {
-            margin: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/creator-main.css" />
 }
 
-<div class="container">
-    <div class="profile-header">
-        <img src="data:image/jpeg;base64,@Convert.ToBase64String(@Model.ProfilPicture)" alt="Photo" width="150" />
+@{
+    ViewData["Title"] = $"Page {Model.ProfilName}";
+}
 
-        <h1 class="profile-name">@Model.ProfilName</h1>
-    </div>
+<div class="creator-main-container">
+    <div class="creator-main-profile-header">
 
-    <div class="profile-description">
-        <p>@Model.Description</p>
-    </div>
+        <img class="creator-main-profilepicture" src="data:image/jpeg;base64,@Convert.ToBase64String(@Model.ProfilPicture)" alt="Photo" />
 
-    <div class="profile-action">
-        <div class="creator-info followers">
-            <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">Check creator fans</a>
+        <div class="creator-main-profile-description">
+            <h1 class="creator-main-profile-name">@Model.ProfilName</h1>
+            <p>@Model.Description</p>
+
+            <div class="creator-main-profile-links">
+                <h2>Find me on:</h2>
+                <ul>
+                    @foreach (var link in Model.BioLinks.Split(','))
+                    {
+                        <li><a href="@link" target="_blank">@link</a></li>
+                    }
+                </ul>
+            </div>
         </div>
-        <div class="donate-section">
-            <a href="@Url.Action("DonateCreator", "Donate", new { Creator = @Model.ProfilName, Id_Donates = @Model.Id_Donates })" class="btn btn-primary">Donate Now</a>
-        </div>
 
-        <div class="following">
+        <div class="creator-main-profile-action">
+            <a href="@Url.Action("GetFollowersCreator", "Follower", new { Id_Creator = @Model.Id_Creator })" class="creator-main-btn">Check fans</a>
+            <a href="@Url.Action("DonateCreator", "Donate", new { Creator = @Model.ProfilName, Id_Donates = @Model.Id_Donates })" class="creator-main-btn">Donate</a>
+
             @if (ViewBag.IsFollowing)
             {
-                <a href="@Url.Action("UnFollow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">UnFollow</a>
+                <a href="@Url.Action("UnFollow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="creator-main-btn">Unfollow</a>
             }
             else
             {
-                <a href="@Url.Action("Follow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="btn btn-primary">Follow</a>
+                <a href="@Url.Action("Follow", "Follower", new { Id_Creator = @Model.Id_Creator })" class="creator-main-btn">Follow</a>
             }
+
+            <a href="@Url.Action("UserCreatorPhotos", "Photo", new { Id_Photos = @Model.Id_Photos })" class="creator-main-btn">Photos</a>
+            <a href="@Url.Action("ShowSchedule", "Schedule", new { Id_Calendar = @Model.Id_Calendar })" class="creator-main-btn">Events calendar</a>
+            <a href="@Url.Action("CreatorAnnouncement", "Announcement", new { Id_Announcement = @Model.Id_Announcement })" class="creator-main-btn">Announcement</a>
         </div>
-
-        <div class="photos">
-            <a href="@Url.Action("UserCreatorPhotos", "Photo", new { Id_Photos = @Model.Id_Photos })" class="btn btn-primary">Check photos</a>
-        </div>
-
-        <div class="creator-info followers">
-            <a href="@Url.Action("ShowSchedule", "Schedule", new { Id_Calendar = @Model.Id_Calendar })" class="btn btn-primary">Show events calendar</a>
-        </div>
-
-        <div class="an">
-            <a href="@Url.Action("CreatorAnnouncement", "Announcement", new { Id_Announcement = @Model.Id_Announcement })" class="btn btn-primary">Check announcement</a>
-        </div>
-    </div>
-
-
-    <div class="profile-links">
-        <h2>Find me on:</h2>
-        <ul>
-            @foreach (var link in Model.BioLinks.Split(','))
-            {
-                <li><a href="@link" target="_blank">@link</a></li>
-            }
-        </ul>
     </div>
 </div>
-
-
-

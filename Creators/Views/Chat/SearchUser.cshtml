@@ -1,10 +1,21 @@
-﻿<div>
-    <form method="post" asp-action="SearchUserResult" asp-controller="Chat">
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/chats.css" />
+}
 
-        <label for="userphrase">Find user:</label>
-        <input type="text" name="userphrase" minlength="5" maxlength="20" pattern="[A-Za-z]+" required placeholder="Find user" />
+@{
+    ViewData["Title"] = "Search user";
+}
 
+<div class="chat-container-info">
 
-        <button type="submit">Find User</button>
-    </form>
+    <div class="chat-form">
+
+        <form method="post" asp-action="SearchUserResult" asp-controller="Chat">
+
+            <label for="userphrase">Find user:</label>
+            <input type="text" name="userphrase" minlength="5" maxlength="20" pattern="[A-Za-z]+" required placeholder="Enter user nick" />
+
+            <button type="submit" class="chat-button" style="width: 100px; white-space: nowrap;">Find User</button>
+        </form>
+    </div>
 </div>

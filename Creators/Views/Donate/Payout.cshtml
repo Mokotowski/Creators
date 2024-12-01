@@ -1,13 +1,23 @@
-﻿@{
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/donate.css" />
+}
+
+@{
     ViewData["Title"] = "Payout";
 }
 
-<h2>Payout</h2>
+<div class="donate-container-info">
+    <div class="donate-info">
+        <div class="donate-form">
+            <h2>Payout on your Paypal connected with this account</h2>
 
-<form method="post" action="@Url.Action("Payout")">
-    <div class="form-group">
-        <label for="amount">Amount in $:</label>
-        <input type="number" name="amount" id="amount" class="form-control" step="1" min="1" required />
+            <form method="post" action="@Url.Action("Payout")">
+                <div class="form-group">
+                    <label for="amount">Amount in $:</label>
+                    <input type="number" name="amount" id="amount" class="form-control" placeholder="Enter amount" step="1" min="1" required pattern="\d+" title="Please enter a valid whole number" />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>

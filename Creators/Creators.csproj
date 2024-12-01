@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\account.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\announcement.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\chats.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\donate.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\followers-creator.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\photos.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\search.css" />
   </ItemGroup>
 

@@ -1,21 +1,30 @@
-﻿@{
-    ViewBag.Title = "Resend Confirmation";
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
 }
 
-<h2>Confirmation Email Resent</h2>
+@{
+    ViewData["Title"] = "Resend confirmation";
+}
 
-<p>
-    The confirmation email has been resent to the address: <strong>@(ViewBag.Email)</strong>.
-</p>
+<div class="container-account">
 
-<p>
-    Please check your email inbox, including the spam folder, if you do not see the message in your main inbox.
-</p>
 
-<p>
-    If you still do not receive the email, please contact our support team.
-</p>
+    <h2>Confirmation Email Resent</h2>
 
-<p>
-    Thank you for your patience and we apologize for any inconvenience.
-</p>
+    <p>
+        The confirmation email has been resent to the address: <strong>@(ViewBag.Email)</strong>.
+    </p>
+
+    <p>
+        Please check your email inbox, including the spam folder, if you do not see the message in your main inbox.
+    </p>
+
+    <p>
+        If you still do not receive the email, please contact our support team.
+    </p>
+
+    <p>
+        Thank you for your patience and we apologize for any inconvenience.
+    </p>
+
+</div>

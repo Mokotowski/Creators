@@ -1,26 +1,50 @@
 ﻿@model List<Creators.Creators.Database.Chats>
 
-@foreach(var chat in Model)
-{
-    if(chat.User1 == ViewBag.UserName)
+@section Styles {
+    <link rel="stylesheet" href="~/css/chats.css" />
+}
+
+@{
+    ViewData["Title"] = "My chats";
+}
+
+<div class="chat-container-info">
+    <h2>Chats</h2>
+
+    @if (Model.Any())
     {
-        <p>@chat.User2</p>
+        <ul class="chat-list">
+            @foreach (var chat in Model)
+            {
+                <li class="chat-item">
 
-        <form method="get" asp-action="Chat" asp-controller="Chat">
-            <input type="hidden" name="Id" value="@chat.Id" />
+                    @if(chat.User1 == ViewBag.UserName)
+                    {
+                        <div class="chat-info">
+                            <p>@chat.User2</p>
+                        </div>
+    
+                        <a href="@Url.Action("Chat", "Chat", new { Id = chat.Id })" class="chat-button">Chat</a>
+                    }
+                    else
+                    {
+                        <div class="chat-info">
+                            <p>@chat.User1</p>
+                        </div>
 
-            <button type="submit">Chat</button>
-        </form>
+                        <a href="@Url.Action("Chat", "Chat", new { Id = chat.Id })" class="chat-button">Chat</a>
+                    }
+
+
+                    <hr />
+                </li>
+            }
+        </ul>
+
     }
     else
     {
-        <p>@chat.User1</p>
-
-        <form method="get" asp-action="Chat" asp-controller="Chat">
-            <input type="hidden" name="Id" value="@chat.Id" />
-
-            <button type="submit">Chat</button>
-        </form>
+        <p>No chats found.</p>
     }
+</div>
 
-}

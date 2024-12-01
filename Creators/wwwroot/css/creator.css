@@ -1,0 +1,197 @@
+﻿.creator-container-info {
+    min-width: 400px;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgb(45, 48, 50);
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.creator-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.creator-item {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.creator-info {
+    font-size: 1.2rem;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    width: 100%;
+    max-width: 800px;
+    background-color: rgb(60, 63, 65);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.creator-button {
+    margin-left: 15px;
+    padding: 5px 10px;
+    width: 55px;
+    height: 55px;
+    background-color: rgb(0, 122, 204);
+    color: white;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    align-content: center;
+}
+
+    .creator-button:hover {
+        background-color: rgb(0, 102, 184);
+    }
+
+
+input {
+    width: 100%;
+    padding: 10px;
+    background-color: rgb(60, 63, 65);
+    color: white;
+    border: 1px solid rgb(75, 78, 80);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+    input:focus,
+    input:hover {
+        background-color: white;
+        color: black;
+        border-color: rgb(100, 150, 250);
+    }
+
+
+.creator-form {
+    align-self: center;
+    margin: 10px;
+    width: 100%;
+    max-width: 500px;
+    background-color: rgb(45, 48, 50);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+label {
+    display: block;
+    font-size: 18px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.btn-danger {
+    background-color: rgb(220, 53, 69);
+    color: white;
+}
+
+    .btn-danger:hover {
+        background-color: rgb(200, 43, 59);
+    }
+
+
+
+
+
+
+
+
+
+
+
+.creator-manage-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgb(45, 48, 50);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;  
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+} 
+
+.creator-manage-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgb(60, 63, 65);
+    border-radius: 8px;
+}
+
+label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+textarea,
+input[type="text"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    background-color: rgb(45, 48, 50);
+    color: white;
+    border: 1px solid rgb(75, 78, 80); 
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+    textarea:focus,
+    input[type="text"]:focus,
+    input[type="file"]:focus {
+        outline: none;
+        border-color: rgb(100, 150, 250);
+    }
+
+.profile-image {
+    max-width: 80px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.notification-options label {
+    display: block;
+    margin: 5px 0;
+}
+
+.btn-update-profile {
+    width: 100%;
+    padding: 10px;
+    background-color: rgb(0, 122, 204);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .btn-update-profile:hover {
+        background-color: rgb(0, 102, 184);
+    }

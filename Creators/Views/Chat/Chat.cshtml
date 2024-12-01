@@ -2,15 +2,13 @@
 @inject Creators.Creators.Services.Interface.IBlock _block;
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/chat.css" />
+    <link rel="stylesheet" href="~/css/chats.css" />
 }
 
-
 @{
-
+    ViewData["Title"] = $"Chat - {ViewBag.UserName}";
 
     string friend_Id;
-
 
     @if (Model.Id_User1 == ViewBag.User.Id)
     {
@@ -20,95 +18,111 @@
     {
         friend_Id = @Model.Id_User1;
     }
+
     string blockresult = _block.CheckBlock(friend_Id, ViewBag.User);
 
-}
-
-<form asp-action="RefreshChat" method="post">
-    <input type="hidden" name="Id" value="@Model.Id" />
-    <button type="submit" class="btn btn-danger">Refresh</button>
-</form>
 
 
-@if(blockresult == "Not")
-{
-<form asp-action="BlockUser" method="post">
-    <input type="hidden" name="Id_User" value="@friend_Id" />
-    <button type="submit" class="btn btn-danger">Block</button>
-</form>
-}
+    string placeholderText = "";
+    bool isBlock = false;
 
-
-
-
-
-
-@if(Model.Messages.Count > 0)
-{
-<div class="chat-container">
-    @foreach (var message in Model.Messages)
+    switch (blockresult)
     {
-        <div class="message-container">
-            @if (message.Id_Sender == ViewBag.User.Id)
+        case "Not":
+            placeholderText = "Type your message...";
+            isBlock = false;
+            break;
+        case "Block":
+            placeholderText = "You blocked this user...";
+            isBlock = true;
+            break;
+        case "IsBlocked":
+            placeholderText = "You're blocked by this user...";
+            isBlock = true;
+            break;
+    }
+}
+
+
+
+
+
+<div id="chat-container">
+    <div id="chat-actions">
+        <form asp-action="RefreshChat" method="post">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <button type="submit" id="chat-refresh">Refresh</button>
+        </form>
+
+        <h2> Chat with @ViewBag.UserName </h2>
+
+        @if (blockresult == "Not")
+        {
+            <form asp-action="BlockUser" method="post">
+                <input type="hidden" name="Id_User" value="@friend_Id" />
+                <button type="submit" class="btn btn-danger">Block</button>
+            </form>
+        }
+
+    </div>
+
+    <div id="chat-messages">
+        @if (Model.Messages.Any())
+        {
+            @foreach (var message in Model.Messages.OrderBy(a => a.DateTime))
             {
-                <!-- Message sent by the current user (display on the right) -->
-                <div class="message-sent">
-                    <div class="message-text">
-                        @message.Text
-                    </div>
-                    <div class="message-actions">
-                        <!-- Option to delete message if it's the user's own message -->
+                @if (message.Id_Sender == ViewBag.User.Id)
+                {
+                    <div class="chat-message-box-me">
+                        <div class="chat-message-me">
+                            <p>Me</p>
+                            @message.Text
+                        </div>
+                        <div class="message-actions">
                             @if (@message.Text != "Message deleted")
                             {
                                 <form asp-action="DeleteMessage" method="post">
                                     <input type="hidden" name="Id" value="@message.Id" />
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    <button type="submit" class="btn-danger">Delete</button>
                                 </form>
                             }
+                        </div>
                     </div>
-                </div>
-            }
-            else
-            {
-                <!-- Message received by the current user (display on the left) -->
-                <div class="message-received">
-                    <div class="message-text">
-                        @message.Text
+                }
+                else
+                {
+                    <div class="chat-message-friend">
+                        <p>@ViewBag.UserName</p>
+                        <div class="chat-message-friend">
+                            @message.Text
+                        </div>
                     </div>
-                </div>
+                }
             }
-        </div>
-    }
+        }
+        else
+        {
+            <div class="chat-info">
+
+                <p>No messages found</p>
+
+            </div>
+        }
+    </div>
+
+    <form asp-action="SendMessage" method="post" class="chat-message-form">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <textarea name="Text" class="form-control" rows="3" max="250" placeholder="@placeholderText" @(isBlock ? "readonly" : "")></textarea>
+        <button type="submit" class="btn btn-primary" @(isBlock ? "disabled" : "")>Send</button>
+    </form>
+
+
 </div>
-}
 
 
-
-@if(blockresult == "Not")
-{
-    <form asp-action="SendMessage" method="post">
-        <input type="hidden" name="Id" value="@Model.Id" />
-        <textarea name="Text" class="form-control" rows="3" placeholder="Type your message..."></textarea>
-        <button type="submit" class="btn btn-primary">Send</button>
-    </form>
-
-}
-
-@if (blockresult == "Block")
-{
-    <form asp-action="SendMessage" method="post">
-        <input type="hidden" name="Id" value="@Model.Id" />
-        <textarea name="Text" class="form-control" rows="3" readonly placeholder="You blocked this user..."></textarea>
-    </form>
-
-}
-
-@if (blockresult == "IsBlocked")
-{
-    <form asp-action="SendMessage" method="post">
-        <input type="hidden" name="Id" value="@Model.Id" />
-        <textarea name="Text" class="form-control" rows="3" readonly placeholder="You're blocked by this user..."></textarea>
-    </form>
-
-}
-
+<script>
+    window.onload = function() {
+        var chatMessages = document.getElementById("chat-messages");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+</script>

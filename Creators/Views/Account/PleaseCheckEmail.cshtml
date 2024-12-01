@@ -1,19 +1,32 @@
-﻿@{
-    ViewBag.Title = "Registration Confirmation";
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
 }
 
-<h2>Registration Confirmation</h2>
+@{
+    ViewData["Title"] = "Registration confirmation";
+}
 
-<p>Thank you for registering!</p>
-<p>
-    To complete the registration process, please check your email inbox and click the confirmation link
-    we sent to your email address: <strong>@(ViewBag.Email)</strong>.
-</p>
 
-<p>
-    If you did not receive the email, please check your spam folder or
-    <form id="resendemail" method="get" asp-action="ResendConfirmationEmail" asp-controller="Account">
-        <input type="hidden" name="Email" value="@(ViewBag.Email)" />
-        <button type="submit">resend the message</button>
-    </form>
-</p>
+<div class="container-account">
+
+    <h2>Registration Confirmation</h2>
+
+    <p>Thank you for registering!</p>
+
+    <p>
+        To complete the registration process, please check your email inbox and click the confirmation link.
+    </p>
+
+    <p>
+        We sent to your email address: <strong>@(ViewBag.Email)</strong>.
+    </p>
+
+    <p>
+        If you did not receive the email, please check your spam folder or
+        <a href="@Url.Action("ResendConfirmationEmail", "Account", new { Email = ViewBag.Email })">
+            resend the message
+        </a>
+
+    </p
+
+</div>

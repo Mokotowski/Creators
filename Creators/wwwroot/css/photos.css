@@ -1,0 +1,294 @@
+﻿.photo-container-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: rgb(32, 35, 36);
+    color: white;
+}
+
+.photo-list-item {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    background-color: rgb(40, 44, 45);
+    border: 1px solid rgb(60, 63, 65);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.photo-main-image {
+    position: relative;
+    text-align: right;
+    margin: 20px;
+}
+
+.photo-info-content {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.photo-main-image img {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.photo-main-image p {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.photo-actions-main {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.like-form {
+    margin: 0;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+    .like-button:hover {
+        color: rgb(255, 77, 77);
+    }
+
+    .like-button i {
+        font-size: 24px;
+    }
+
+    .like-button.liked i {
+        color: rgb(255, 0, 0);
+    }
+
+.like-count {
+    margin: 0;
+    font-size: 16px;
+}
+
+.photo-comments-main {
+    margin-top: 20px;
+}
+
+.photo-comments-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: rgb(50, 54, 55);
+    border-radius: 5px;
+}
+
+.photo-comment-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+    .photo-comment-item p {
+        margin: 0;
+        color: white;
+    }
+
+.photo-comments-main .form-group {
+    margin-bottom: 15px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: rgb(70, 130, 180);
+    color: white;
+}
+
+.btn-danger {
+    background-color: rgb(178, 34, 34);
+    color: white;
+}
+
+.photo-info {
+    text-align: center;
+    font-style: italic;
+    color: rgb(200, 200, 200);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.photo-container-info {
+    min-width: 400px;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgb(45, 48, 50);
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.photo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.photo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+.photo-info {
+    text-align: center;
+    margin: 20px 0;
+    color: rgb(255, 255, 255);
+}
+
+.photo-info {
+    font-size: 1.2rem;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.hidden-comment {
+    color: red;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+.photo-button {
+    margin-left: 15px;
+    padding: 5px 10px;
+    width: 55px;
+    height: 55px;
+    background-color: rgb(0, 122, 204);
+    color: white;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    align-content: center;
+}
+
+    .photo-button:hover {
+        background-color: rgb(0, 102, 184);
+    }
+
+
+input {
+    width: 100%;
+    padding: 10px;
+    background-color: rgb(60, 63, 65);
+    color: white;
+    border: 1px solid rgb(75, 78, 80);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+    input:focus,
+    input:hover {
+        background-color: white;
+        color: black;
+        border-color: rgb(100, 150, 250);
+    }
+
+
+.photo-form {
+    margin: 10px;
+    width: 100%;
+    max-width: 500px;
+    background-color: rgb(45, 48, 50);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.photo-info {
+    margin: 5px;
+    width: 100%;
+    max-width: 500px;
+    background-color: rgb(60, 63, 65);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-control {
+    margin: 5px;
+}
+
+label {
+    display: block;
+    font-size: 18px;
+    color: white;
+    margin-bottom: 5px;
+} 
+
+.btn-danger {
+    background-color: rgb(220, 53, 69);
+    color: white;
+}
+
+    .btn-danger:hover {
+        background-color: rgb(200, 43, 59);
+    }
+
+
+.btn-primary {
+    background-color: rgb(0, 122, 204);
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: rgb(0, 102, 184);
+    }

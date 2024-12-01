@@ -1,45 +1,53 @@
 ﻿@model Creators.Creators.Models.CreatorPageShow
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/search.css" />
+    <link rel="stylesheet" href="~/css/creator.css" />
 }
 
+@{
+    ViewData["Title"] = "Manage Creator Profile";
+}
 
-<div class="form-container">
-    <form id="updatePageForm" method="post" enctype="multipart/form-data" asp-action="UpdatePageRequest" asp-controller="Creator">
+<div class="creator-manage-container">
+    <h1>Manage Your Creator Profile</h1>
 
-        <div class="form-group">
+    <form method="post" enctype="multipart/form-data" asp-action="UpdatePageRequest" asp-controller="Creator">
+
+        <div class="creator-manage-section">
+            <h2>Profile Description</h2>
             <label for="description">Description:</label>
-            <textarea id="description" name="Description" rows="4" maxlength="500" required placeholder="Describe your profile">@Model.Description</textarea>
+            <textarea id="description" name="Description" rows="4" maxlength="500" required>@Model.Description</textarea>
         </div>
 
-        <img src="data:image/jpeg;base64,@Convert.ToBase64String(@Model.ProfilPicture)" alt="Photo" width="150" />
-
-        <div class="form-group">
-            <label for="ProfileImage">Wybierz plik</label>
-            <input type="file" id="ProfileImage" name="ProfileImage" class="form-control" />
+        <div class="creator-manage-section">
+            <h2>Profile Picture</h2>
+            <img src="data:image/jpeg;base64,@Convert.ToBase64String(@Model.ProfilPicture)" alt="Profile Picture" class="profile-image" />
+            <label for="ProfileImage">Upload New Picture:</label>
+            <input type="file" id="ProfileImage" name="ProfileImage" accept="image/jpeg, image/png, image/gif" />
         </div>
 
-
-        <div class="form-group">
-            <label>Receive Notifications:</label>
-            <div class="checkbox-group">
+        <div class="creator-manage-section">
+            <h2>Notification Preferences</h2>
+            <div class="notification-options">
                 <label>
-                    <input type="checkbox" id="NotifyImages" name="NotifyImages" value="true" @(Model.NotifyImages ? "checked" : "") />
                     Notify about new images
+                    <input type="checkbox" id="NotifyImages" name="NotifyImages" value="true" @(Model.NotifyImages ? "checked" : "") />
                 </label>
                 <label>
-                    <input type="checkbox" id="NotifyEvents" name="NotifyEvents" value="true" @(Model.NotifyEvents ? "checked" : "") />
                     Notify about new events
+                    <input type="checkbox" id="NotifyEvents" name="NotifyEvents" value="true" @(Model.NotifyEvents ? "checked" : "") />
                 </label>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="creator-manage-section">
+            <h2>Bio Links</h2>
             <label for="bioLinks">Bio Links:</label>
             <input type="text" id="bioLinks" name="BioLinks" value="@Model.BioLinks" placeholder="Enter Bio Links (comma separated)" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Update Profile</button>
+        <div class="creator-manage-section">
+            <button type="submit" class="btn-update-profile">Update Profile</button>
+        </div>
     </form>
 </div>

@@ -1,18 +1,24 @@
 ﻿@model Creators.Creators.Models.CreatorPageShow
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/search.css" />
+    <link rel="stylesheet" href="~/css/creator.css" />
+}
+
+@{
+    ViewData["Title"] = "Update account";
 }
 
 
-<div class="form-container">
-    <form id="updatePageForm" method="post" asp-action="UpdatePageAccountNumberRequest" asp-controller="Creator">
+<div class="creator-container-info">
+    <div class="creator-info">
+        <form id="updatePageForm" method="post" asp-action="UpdatePageAccountNumberRequest" asp-controller="Creator">
 
-        <div class="form-group">
-            <label for="accountNumber">Account Number:</label>
-            <input type="text" id="accountNumber" name="AccountNumber" value="@Model.AccountNumber" maxlength="40" required />
-        </div>
+            <div class="form-group">
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber" name="AccountNumber" value="@Model.AccountNumber" maxlength="40" pattern="\d+" required />
+            </div>
 
-        <button type="submit" class="btn btn-primary">Update Account Number</button>
-    </form>
+            <button type="submit" class="btn btn-primary">Update Account Number</button>
+        </form>
+    </div>
 </div>

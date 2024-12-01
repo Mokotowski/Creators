@@ -1,37 +1,44 @@
 ﻿@model List<Creators.Creators.Models.DonateCreatorForView>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/donates-list.css" />
+    <link rel="stylesheet" href="~/css/donate.css" />
 }
 
-<div id="balance-section">
-    <h2>Account Balance</h2>
-    <p><strong>Current Balance:</strong> @ViewBag.Balance $</p>
-    <p><strong>Last Deposit:</strong> @ViewBag.LastDeposit</p>
-    <p><strong>Last Cashout:</strong> @ViewBag.LastCashout</p>
-</div>
+@{
+    ViewData["Title"] = "Check donates";
+}
 
-<div id="donates-section">
+<div class="donate-container-info">
+    <h2>Account Balance</h2>
+
+    <div class="donate-info">
+        <p><strong>Current Balance:</strong> @ViewBag.Balance $</p>
+        <p><strong>Last Deposit:</strong> @ViewBag.LastDeposit</p>
+        <p><strong>Last Cashout:</strong> @ViewBag.LastCashout</p>
+    </div>
+
     <h2>Donations</h2>
-    <table id="donates-table">
-        <thead>
-            <tr>
-                <th>Donator</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Currency</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var donate in Model.OrderByDescending(d => d.DateTime))
-            {
-                <tr>
-                    <td>@donate.Donator</td>
-                    <td>@donate.DateTime.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@donate.Count</td>
-                    <td>@donate.Currency</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+    <div class="donate-list">
+        @if (Model.Any())
+        {
+            <ul>
+                @foreach (var donate in Model.OrderByDescending(d => d.DateTime))
+                {
+                    <div class="donate-item">
+                        <li>
+                            <p>@donate.Donator - @donate.DateTime.ToString("yyyy-MM-dd HH:mm")</p>
+                            <p><strong>@donate.Count @donate.Currency</strong></p>
+                        </li>
+                    </div>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="donate-info">
+                <p>No donations found.</p>
+            </div>
+        }
+</div>
 </div>

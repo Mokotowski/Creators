@@ -1,7 +1,21 @@
-﻿<h2>Successfully Logged Out</h2>
-<p>Your account has been successfully logged out. Thank you for using our application!</p>
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
+}
 
-<div style="margin-top: 20px;">
-    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Return to Home Page</a>
-    <a href="@Url.Action("Login", "Account")" class="btn btn-secondary">Log In Again</a>
+@{
+    ViewData["Title"] = "Logged out";
+}
+
+
+<div class="container-account">
+
+    <h2>Successfully Logged Out</h2>
+    <p>Your account has been successfully logged out. Thank you for using our application!</p>
+
+
+    <div style="margin-top: 20px;">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Return to Home Page</a>
+        <a href="@Url.Action("Login", "Account")" class="btn btn-secondary">Log In Again</a>
+    </div>
+
 </div>

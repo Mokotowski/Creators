@@ -1,36 +1,42 @@
 ﻿@model List<Creators.Creators.Models.CommentsForUser>
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/photos.css" />
+}
+
 @{
-    ViewData["Title"] = "Comments for Photo";
+    ViewData["Title"] = "Comments";
 }
 
-<h2>@ViewData["Title"]</h2>
 
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>User</th>
-                <th>Comment</th>
-                <th>Date</th>
-                <th>Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var comment in Model)
-            {
-                <tr>
-                    <td>@comment.User</td>
-                    <td>@comment.Text</td>
-                    <td>@comment.Date.ToString("yyyy-MM-dd")</td>
-                    <td>@comment.Time.ToString("HH:mm:ss")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No comments available for this photo.</p>
-}
+<div class="photo-container-info">
+
+    <h2>Comments</h2>
+
+    <div class="photo-list">
+        @if (Model.Any())
+        {
+            <ul>
+                @foreach (var comment in Model)
+                {
+                    <div class="photo-item">
+                        <li>
+                            <p>@comment.User - @(new DateTime(comment.Date.Year, comment.Date.Month, comment.Date.Day, comment.Time.Hour, comment.Time.Minute, comment.Time.Second).ToString("HH:mm dd-MM-yyyy"))</p>
+                            <p>@comment.Text</p>
+                        </li>
+                    </div>
+                }
+        </ul>
+        }
+        else
+        {
+        <div class="photo-info">
+            <p>No comments available for this photo.</p>
+        </div>
+        }
+    </div>
+</div>
+
+
+
+

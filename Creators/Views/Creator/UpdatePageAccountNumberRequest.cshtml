@@ -1,6 +1,17 @@
-﻿<div class="container-updaterequest">
-    <h1>Request Sent Successfully</h1>
-    <p>Your request to update data on the creator's website has been successfully submitted. Since you are the owner of the page and all the provided information is correct, an email has been sent to the address associated with your account.</p>
-    <p>Please check your email for further instructions. If you do not see the email in your inbox, make sure to check your spam or junk folder as well.</p>
-    <p>Thank you for your cooperation and patience!</p>
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/creator.css" />
+}
+
+@{
+    ViewData["Title"] = "Request sent";
+}
+
+
+<div class="creator-container-info">
+    <div class="creator-info">
+        <h1>Request Sent Successfully</h1>
+        <p>Your request to update data on the creator's website has been successfully submitted. Since you are the owner of the page and all the provided information is correct, an email has been sent to the address associated with your account.</p>
+        <p>Please check your email for further instructions. If you do not see the email in your inbox, make sure to check your spam or junk folder as well.</p>
+        <p>Thank you for your cooperation and patience!</p>
+    </div>
 </div>

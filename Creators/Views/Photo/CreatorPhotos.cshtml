@@ -1,81 +1,99 @@
 ﻿@model List<Creators.Creators.Models.PhotoForCreator>
 
-@{
-    ViewData["Title"] = "Manage Your Photos";
+@section Styles {
+    <link rel="stylesheet" href="~/css/photos.css" />
 }
 
-<h2>@ViewData["Title"]</h2>
+@{
+    ViewData["Title"] = "Manage photos";
+}
 
-@if (Model != null && Model.Any())
-{
-    @foreach (var photo in Model)
+
+<div class="photo-container-main">
+
+    @if (Model.Any())
     {
-        <p>@photo.DateTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
-        <img src="data:image/jpeg;base64,@Convert.ToBase64String(photo.File)" alt="Photo" width="150" />
-        <p>@photo.Description</p>
-        <p>Heart count: @photo.Hearts.Count</p>
-
-        <form asp-action="DeletePhoto" method="post">
-            <input type="hidden" name="Id" value="@photo.Id" />
-            <button type="submit" class="btn btn-danger">Delete photo</button>
-        </form>
-
-
-        <a href="@Url.Action("CheckLikesCreator", "Photo", new { Id = photo.Id })" class="btn btn-primary">
-            Check likes
-        </a>
-        @if (photo.CommentsOpen)
+        @foreach (var photo in Model)
         {
-            <a href="@Url.Action("CheckCommentsCreator", "Photo", new { Id = photo.Id })
-            " class="btn btn-primary">
-                Check comments
-            </a>
-        }
+            <div class="photo-list-item">
+                <div class="photo-main-image">
+                    <div class="photo-info-content">
+                        <p>@photo.DateTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                    </div>
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(photo.File)" alt="Photo" width="450" />
+                    <p class="photo-description">@photo.Description</p>
 
-        @if (photo.CommentsOpen)
-        {
-            @if (photo.comments.Any())
-            {
-                foreach (var comment in photo.comments)
-                {
-                    <p>@comment.User - @($"{comment.Date.ToString("yyyy-MM-dd")} {comment.Time.ToString("HH:mm:ss")}")</p>
+                </div>
 
-                    @if (comment.Hidden)
+                <div class="photo-actions-main">
+                    <form asp-action="DeletePhoto" method="post">
+                        <input type="hidden" name="Id" value="@photo.Id" />
+                        <button type="submit" class="btn btn-danger">Delete photo</button>
+                    </form>
+
+                    <a href="@Url.Action("CheckLikesCreator", "Photo", new { Id = photo.Id })">
+                        Check likes
+                        <p class="like-count"><i class="fas fa-heart"></i> @photo.Hearts.Count</p>
+                    </a>
+
+                    @if (photo.CommentsOpen)
                     {
-                        <p style="color: red">@comment.Text</p>
+                        <a href="@Url.Action("CheckCommentsCreator", "Photo", new { Id = photo.Id })">
+                            Check comments
+                        </a>
+                    }
+                </div>
 
-                        <form asp-action="ChangeVisibleComment" method="post">
-                            <input type="hidden" name="Id" value="@comment.Id" />
-                            <button type="submit" class="btn btn-danger">Change to visible</button>
-                        </form>
+                <div class="photo-comments-main">
+                    @if (photo.CommentsOpen)
+                    {
+                        @if (photo.comments.Any())
+                        {
+                            <div class="photo-comments-list">
+                                @foreach (var comment in photo.comments)
+                                {
+                                    <div class="photo-comment-item">
+                                        <p>@comment.User - @($"{comment.Date.ToString("yyyy-MM-dd")} {comment.Time.ToString("HH:mm:ss")}")</p>
+                                        @if (comment.Hidden)
+                                        {
+                                            <p class="comment-text" style="color: red;">@comment.Text</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="comment-text">@comment.Text</p>
+                                        }
+
+                                        <form asp-action="ChangeVisibleComment" method="post">
+                                            <input type="hidden" name="Id" value="@comment.Id" />
+                                            <button type="submit" class="btn btn-danger">
+                                                Change to @(comment.Hidden ? "visible" : "not visible")
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="photo-info">
+                                <p>No comments available.</p>
+                            </div>
+                        }
                     }
                     else
                     {
-                        <p>@comment.Text</p>
-
-                        <form asp-action="ChangeVisibleComment" method="post">
-                            <input type="hidden" name="Id" value="@comment.Id" />
-                            <button type="submit" class="btn btn-danger">Change to not visible</button>
-                        </form>
+                        <div class="photo-info">
+                            <p>Comments closed.</p>
+                        </div>
                     }
-                }
-            }
-            else
-            {
-                <p>No comments available.</p>
-            }
+                </div>
+            </div>
         }
-        else
-        {
-            <p>Comments are closed.</p>
-        }
-
-        <br />
-        <br />
-        <br />
     }
-}
-else
-{
-    <p>You haven't uploaded any photos yet.</p>
-}
+    else
+    {
+        <div class="photo-info">
+            <p>You haven't uploaded any photos yet.</p>
+        </div>
+    }
+</div>

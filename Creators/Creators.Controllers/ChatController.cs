@@ -1,12 +1,14 @@
 ﻿using Creators.Creators.Database;
 using Creators.Creators.Models;
 using Creators.Creators.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security;
 
 namespace Creators.Creators.Controllers
 {
+    [Authorize]
     public class ChatController : Controller
     {
         private readonly IBlock _block;
@@ -51,9 +53,11 @@ namespace Creators.Creators.Controllers
         [HttpGet]
         public async Task<IActionResult> Chat(int Id)
         {
-            Chats chat = await _actions.GetChat(Id);
             UserModel user = await _userManager.GetUserAsync(User);
+            (Chats chat, string UserName) = await _actions.GetChat(Id, user);
             ViewBag.User = user;
+            ViewBag.UserName = UserName;
+
             return View(chat);
         }
 

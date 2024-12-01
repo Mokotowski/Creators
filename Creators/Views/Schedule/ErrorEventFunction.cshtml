@@ -1,4 +1,14 @@
-﻿<div id="error-container">
-    <h1>Something Went Wrong</h1>
-    <p>We encountered an issue while processing your request. Please try again later. If the problem persists, contact our technical support team.</p>
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/schedule.css" />
+}
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+
+<div class="container-schedule">
+    <h3>Something Went Wrong</h3>
+    <p>We encountered an issue while processing your request. Please try again later. </p>
+    <p>If the problem persists, contact our technical support team.</p>
 </div>

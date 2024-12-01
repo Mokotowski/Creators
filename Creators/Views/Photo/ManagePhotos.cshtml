@@ -1,33 +1,44 @@
 ﻿@model Creators.Creators.Database.CreatorPage
 
-<div class="container">
-    <h2>Dodaj zdjęcie</h2>
+@section Styles {
+    <link rel="stylesheet" href="~/css/photos.css" />
+}
 
-    <form asp-action="AddPhoto" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="Description">Opis zdjęcia</label>
-            <input type="text" id="Description" name="Description" class="form-control" placeholder="Wprowadź opis zdjęcia" />
+@{
+    ViewData["Title"] = "Manage photos";
+}
+
+<div class="photo-container-info">
+    <div class="photo-item">
+        <h2>Dodaj zdjęcie</h2>
+
+        <form asp-action="AddPhoto" method="post" enctype="multipart/form-data" class="photo-form">
+            <div class="form-group">
+                <label for="Description">Opis zdjęcia</label>
+                <input type="text" id="Description" name="Description" class="form-control" placeholder="Wprowadź opis zdjęcia" required />
+            </div>
+
+            <div class="form-group">
+                <label for="file">Wybierz plik</label>
+                <input type="file" id="file" name="file" class="form-control" accept="image/jpeg, image/png, image/gif" required />
+            </div>
+
+            <div class="form-group">
+                <label for="CommentsOpen">Czy komentarze są otwarte?</label>
+                <input type="checkbox" id="CommentsOpen" name="CommentsOpen" value="true" checked />
+            </div>
+
+            <button type="submit" class="btn-primary">Dodaj zdjęcie</button>
+        </form>
+    </div>
+
+        <div class="photo-main-image">
+                <h2>Galeria zdjęć</h2>
+
+            <div class="photo-actions-main">
+                <a href="@Url.Action("CreatorPhotos", "Photo", new { Id_Photos = Model.Id_Photos })" class="btn-primary">
+                    Zobacz zdjęcia
+                </a>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="file">Wybierz plik</label>
-            <input type="file" id="file" name="file" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label for="CommentsOpen">Czy komentarze są otwarte?</label>
-            <input type="checkbox" id="CommentsOpen" name="CommentsOpen" value="true" checked />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Dodaj zdjęcie</button>
-    </form>
-
-    <hr />
-
-    <h2>Galeria zdjęć</h2>
-
-    <a href="@Url.Action("CreatorPhotos", "Photo",  new { Id_Photos = Model.Id_Photos }) )" class="btn btn-primary">
-        Zobacz zdjęcia
-    </a>
-
 </div>

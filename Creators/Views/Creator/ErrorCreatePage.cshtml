@@ -1,5 +1,16 @@
-﻿<h1>Registration Problem</h1>
-<p>Unfortunately, there was a problem with the registration of the page.</p>
-<p>Please try again and ensure that all the data you have entered is correct.</p>
-<p>If the issue persists, you may want to contact support for further assistance.</p>
-<a href="@Url.Action("BecomeCreatorRegisterPlatform", "Creator")">click here</a>.
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/creator.css" />
+}
+
+@{
+    ViewData["Title"] = "Error create";
+}
+
+<div class="creator-container-info">
+    <div class="creator-info">
+        <h1>Registration Problem</h1>
+        <p>Unfortunately, there was a problem with the registration of the page.</p>
+        <p>Please try again and ensure that all the data you have entered is correct. <a href="@Url.Action("BecomeCreatorRegisterPlatform", "Creator")">here</a></p>
+        <p>If the issue persists, you may want to contact support for further assistance.</p>
+    </div>
+</div>

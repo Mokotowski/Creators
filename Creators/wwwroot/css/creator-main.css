@@ -1,0 +1,158 @@
+﻿.creator-main-container {
+    font-family: Arial, sans-serif;
+    background-color: rgb(32, 35, 36);
+    color: white;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 115px;
+    height: 80vh;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.creator-main-profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 75px; 
+    width: 100%;
+}
+
+
+.creator-main-profilepicture {
+    height: auto;
+    max-width: 450px;
+    aspect-ratio: 1; 
+    object-fit: cover; 
+    box-shadow: none; 
+}
+
+
+
+.creator-main-profile-description {
+    max-width: 600px;
+    width: 100%;
+    background-color: rgb(60, 63, 65);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.creator-main-profile-name {
+    font-size: 32px;
+    font-weight: bold;
+    color: white; 
+    margin: 0;
+}
+
+.creator-main-profile-description p {
+    font-size: 16px;
+    color: white; 
+    line-height: 1.6;
+    margin-top: 20px;
+}
+
+.creator-main-profile-links {
+    margin-top: 20px;
+}
+
+    .creator-main-profile-links h2 {
+        font-size: 24px;
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .creator-main-profile-links ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .creator-main-profile-links ul li {
+            margin-bottom: 10px;
+        }
+
+            .creator-main-profile-links ul li a {
+                color: #4e9af1;
+                text-decoration: none;
+                font-size: 16px;
+                transition: color 0.3s;
+            }
+
+                .creator-main-profile-links ul li a:hover {
+                    color: #1d66ad;
+                }
+
+
+.creator-main-profile-action {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    padding-top: 20px;
+    width: 200px;
+}
+
+    .creator-main-profile-action .creator-main-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
+        width: 100%;
+        text-align: center;
+    }
+
+        .creator-main-profile-action .creator-main-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+
+    .creator-main-profile-action .creator-main-btn {
+        animation: buttonAnimation 0.5s ease-out;
+    }
+
+@keyframes buttonAnimation {
+    0% {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+@media (max-width: 1024px) {
+    .creator-main-profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .creator-main-profile-action {
+        width: 100%;
+        align-items: center;
+    }
+
+    .creator-main-profilepicture {
+        margin-bottom: 20px;
+    }
+
+    .creator-main-profile-description {
+        text-align: center;
+    }
+
+    .creator-main-profile-action .creator-main-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}

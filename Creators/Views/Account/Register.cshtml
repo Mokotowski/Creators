@@ -1,5 +1,15 @@
-﻿<div id="register">
-    <div id="normalregister">
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
+}
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+
+<div class="account-actions">
+    <div class="account-form">
         <form id="normalregisterform" method="post" asp-action="SimpleRegister" asp-controller="Account" onsubmit="return validateForm()">
 
             <label for="Nick">Username:</label>
@@ -40,32 +50,6 @@
         </form>
     </div>
 
-    <!--
-    <div id="externalregisters">
-
-        <div class="externalregister">
-            <form id="externalregisterform" method="post" asp-action="ExternalRegister" asp-controller="Account">
-                <input type="hidden" name="type" value="Facebook" />
-                <button type="submit">Facebook</button>
-            </form>
-        </div>
-
-        <div class="externalregister">
-            <form id="externalregisterform" method="post" asp-action="ExternalRegister" asp-controller="Account">
-                <input type="hidden" name="type" value="Microsoft" />
-                <button type="submit">Microsoft Account</button>
-            </form>
-        </div>
-
-        <div class="externalregister">
-            <form id="externalregisterform" method="post" asp-action="ExternalRegister" asp-controller="Account">
-                <input type="hidden" name="type" value="Google" />
-                <button type="submit">Google</button>
-            </form>
-        </div>
-
-    </div>
-    -->
 </div>
 
 @section Scripts {

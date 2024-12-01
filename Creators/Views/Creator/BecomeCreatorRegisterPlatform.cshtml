@@ -1,40 +1,56 @@
-﻿<div class="form-container">
-    <form id="creatorRegisterForm" method="post" enctype="multipart/form-data" asp-action="BecomeCreatorRegisterPlatform" asp-controller="Creator">
-        <div class="form-group">
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/creator.css" />
+}
+
+@{
+    ViewData["Title"] = "Become Creator";
+}
+
+<div class="creator-manage-container">
+    <h1>Become a Creator</h1>
+
+    <form method="post" enctype="multipart/form-data" asp-action="BecomeCreatorRegisterPlatform" asp-controller="Creator">
+
+        <div class="creator-manage-section">
+            <h2>Account Information</h2>
             <label for="accountNumber">Account Number:</label>
             <input type="text" id="accountNumber" name="AccountNumber" maxlength="20" required placeholder="Enter Account Number" />
         </div>
 
-        <div class="form-group">
+        <div class="creator-manage-section">
+            <h2>Profile Description</h2>
             <label for="description">Description:</label>
             <textarea id="description" name="Description" rows="4" maxlength="500" required placeholder="Describe what to expect from your content and something about you"></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="ProfileImage">Wybierz plik</label>
-            <input type="file" id="ProfileImage" name="ProfileImage" class="form-control" />
+        <div class="creator-manage-section">
+            <h2>Profile Picture</h2>
+            <label for="ProfileImage">Upload Profile Picture:</label>
+            <input type="file" id="ProfileImage" name="ProfileImage" accept="image/jpeg, image/png, image/gif" required />
         </div>
 
-
-        <div class="form-group">
-            <label>Receive Notifications:</label>
+        <div class="creator-manage-section">
+            <h2>Notification Preferences</h2>
             <div class="checkbox-group">
                 <label>
-                    <input type="checkbox" id="NotifyImages" name="NotifyImages" value="true" checked/>
+                    <input type="checkbox" id="NotifyImages" name="NotifyImages" value="true" checked />
                     Notify about new photos
                 </label>
                 <label>
-                    <input type="checkbox" id="NotifyEvents" name="NotifyEvents" value="true" checked/>
+                    <input type="checkbox" id="NotifyEvents" name="NotifyEvents" value="true" checked />
                     Notify about new events
                 </label>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="creator-manage-section">
+            <h2>Bio Links</h2>
             <label for="bioLinks">Bio Links:</label>
             <input type="text" id="bioLinks" name="BioLinks" placeholder="Enter Bio Links (comma separated)" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Start you site</button>
+        <div class="creator-manage-section">
+            <button type="submit" class="btn-submit">Start Your Site</button>
+        </div>
     </form>
 </div>

@@ -1,3 +1,16 @@
-﻿<h2>Donation Canceled</h2>
-<p>Your donation has been canceled. If this was a mistake, you can always try again to support your favorite creator.</p>
-<p>If you have any questions or need help with the process, please don't hesitate to contact us. We’re here to assist you!</p>
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/donate.css" />
+}
+
+@{
+    ViewData["Title"] = "Cancel payment";
+}
+
+<div class="donate-container-info">
+    <div class="donate-info">
+        <h2>Donation Canceled</h2>
+        <p>Your donation has been canceled. If this was a mistake, you can always try again to support your favorite creator.</p>
+        <hr>
+        <p>If you have any questions or need help with the process, please don't hesitate to contact us. We’re here to assist you!</p>
+    </div>
+</div>

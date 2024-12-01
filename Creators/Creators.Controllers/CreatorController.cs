@@ -1,11 +1,13 @@
 ﻿using Creators.Creators.Database;
 using Creators.Creators.Models;
 using Creators.Creators.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Creators.Creators.Controllers
 {
+    [Authorize]
     public class CreatorController : Controller
     {
         private readonly IPageFunctions _pageFunctions;
@@ -110,14 +112,26 @@ namespace Creators.Creators.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePageRequest(string Description, IFormFile ProfileImage, bool NotifyImages, bool NotifyEvents, string BioLinks)
         {
-            using (var stream = new MemoryStream())
+            if (ProfileImage != null)
             {
-                await ProfileImage.CopyToAsync(stream);
-                byte[] fileBytes = stream.ToArray();
+                using (var stream = new MemoryStream())
+                {
+                    await ProfileImage.CopyToAsync(stream);
+                    byte[] fileBytes = stream.ToArray();
 
+                    UserModel user = await _userManager.GetUserAsync(User);
+
+                    string result = await _pageFunctions.UpdatePage(user, Description, fileBytes, Path.GetExtension(ProfileImage.FileName).ToLower(), NotifyImages, NotifyEvents, BioLinks);
+
+
+                    return RedirectToAction("UpdatePageResult", "Creator", new { Id_Creator = user.Id, result = result });
+                }
+            }
+            else
+            {
                 UserModel user = await _userManager.GetUserAsync(User);
 
-                string result = await _pageFunctions.UpdatePage(user, Description, fileBytes, Path.GetExtension(ProfileImage.FileName).ToLower(), NotifyImages, NotifyEvents, BioLinks);
+                string result = await _pageFunctions.UpdatePage(user, Description, null, null, NotifyImages, NotifyEvents, BioLinks);
 
 
                 return RedirectToAction("UpdatePageResult", "Creator", new { Id_Creator = user.Id, result = result });
